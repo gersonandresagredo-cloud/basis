@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>basis — El agente que lleva tu obra entera</title>
+<meta name="description" content="Presentación de basis, el primer agente de obra. 19 slides listas para proyectar: presupuestos, mediciones, certificaciones y planificación con tu propio libro de precios.">
+<meta name="theme-color" content="#0A0A0A">
+<meta property="og:title" content="basis — El agente que lleva tu obra entera">
+<meta property="og:description" content="Presentación lista para proyectar. 19 slides sobre el primer agente de obra.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Crect x='6' y='92' width='39' height='36' rx='7' fill='%23fff'/%3E%3Crect x='50' y='92' width='43' height='36' rx='7' fill='%23fff'/%3E%3Crect x='6' y='51' width='24' height='36' rx='7' fill='%23fff'/%3E%3Crect x='35' y='51' width='52' height='36' rx='7' fill='%23fff'/%3E%3Crect x='92' y='51' width='42' height='36' rx='7' fill='%23fff'/%3E%3Crect x='6' y='10' width='39' height='36' rx='7' fill='%23fff'/%3E%3Crect x='50' y='10' width='39' height='36' rx='7' fill='%23fff'/%3E%3Crect x='94' y='10' width='40' height='36' rx='7' fill='%23fff'/%3E%3Crect x='98' y='92' width='36' height='36' rx='7' fill='%233DBE74'/%3E%3C/svg%3E">
+<link rel="preload" href="presentacion/assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Misma Inter que la presentación, servida en local: la landing y el deck
+   se ven igual con o sin internet. */
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('presentacion/assets/fonts/InterVariable.woff2') format('woff2');}
+
+:root{
+  --green:#3DBE74;--gdk:#2A9D5B;--glt:#6BE29A;
+  --bg:#0A0A0A;--ink:#fff;--mut:#A8A8A8;--dim:#6E7571;
+  --line:rgba(255,255,255,.09);--card:rgba(255,255,255,.035);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --gutter:clamp(20px,5vw,72px);
+  --maxw:1240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.45;letter-spacing:-.011em;
+  overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.g{color:var(--green)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter);width:100%}
+
+/* ───────── nav ───────── */
+.nav{
+  position:fixed;inset:0 0 auto;z-index:40;height:72px;
+  display:flex;align-items:center;
+  background:rgba(10,10,10,.72);backdrop-filter:blur(18px) saturate(1.3);
+  border-bottom:1px solid transparent;transition:border-color .35s,background .35s;
+}
+.nav[data-stuck]{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:21px;letter-spacing:-.045em}
+.brand .iso{width:24px;height:24px;flex:none}
+.nav .meta{margin-left:auto;display:flex;align-items:center;gap:22px}
+.nav .date{font-size:14px;font-weight:500;color:var(--mut);letter-spacing:-.005em}
+@media(max-width:720px){.nav .date{display:none}}
+
+/* ───────── botones ───────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  height:54px;padding:0 26px;border-radius:15px;
+  font-size:16px;font-weight:600;letter-spacing:-.015em;white-space:nowrap;
+  transition:transform .25s var(--ease),box-shadow .35s,background .25s,border-color .25s;
+}
+.btn svg{width:19px;height:19px;flex:none}
+.btn-p{background:var(--green);color:#06120B;box-shadow:0 16px 40px -18px rgba(61,190,116,.9)}
+.btn-p:hover{background:var(--glt);transform:translateY(-2px);box-shadow:0 22px 50px -18px rgba(61,190,116,1)}
+.btn-s{border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.btn-s:hover{border-color:rgba(61,190,116,.5);background:rgba(61,190,116,.08);transform:translateY(-2px)}
+.btn-sm{height:44px;padding:0 18px;font-size:14.5px;border-radius:12px}
+.btn:active{transform:translateY(0)}
+
+/* ───────── hero ───────── */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:132px 0 88px;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.halo{
+  position:absolute;z-index:0;pointer-events:none;border-radius:50%;
+  left:50%;top:38%;width:min(1100px,130vw);aspect-ratio:1;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(61,190,116,.17),rgba(61,190,116,.05) 38%,transparent 66%);
+}
+.hero .wrap{position:relative;z-index:2}
+.hero-iso{width:88px;height:88px;margin-bottom:34px}
+.hero-iso .brk{transform-box:fill-box;transform-origin:center;animation:brick .6s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i)*55ms + 120ms)}
+@keyframes brick{from{opacity:0;transform:translateY(-34px) scale(.4)}}
+h1{
+  font-size:clamp(42px,7.4vw,96px);font-weight:600;letter-spacing:-.042em;line-height:1.02;
+  max-width:16ch;text-wrap:balance;
+}
+.lead{
+  margin-top:28px;max-width:40ch;
+  font-size:clamp(17px,2vw,23px);font-weight:300;color:var(--mut);line-height:1.5;
+}
+.lead b{color:var(--ink);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:44px}
+.keys{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:38px;font-size:13.5px;color:var(--dim);font-weight:400}
+kbd{
+  display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;
+  border:1px solid var(--line);border-bottom-width:2px;border-radius:7px;background:rgba(255,255,255,.04);
+  font-family:inherit;font-size:12.5px;font-weight:600;color:var(--mut);margin-right:6px;
+}
+.scroll-cue{
+  position:absolute;left:50%;bottom:34px;z-index:2;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  font-size:11.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.scroll-cue i{display:block;width:1px;height:34px;background:linear-gradient(180deg,var(--green),transparent);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%,100%{opacity:.25;transform:scaleY(.6);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
+@media(max-width:720px){.scroll-cue{display:none}.hero{min-height:auto;padding-top:116px}}
+
+.in{animation:in .7s var(--ease) both;animation-delay:calc(var(--d,0)*70ms)}
+@keyframes in{from{opacity:0;transform:translate3d(0,24px,0)}}
+
+/* ───────── secciones ───────── */
+section.band{padding:clamp(76px,10vw,132px) 0;position:relative;scroll-margin-top:84px}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--line) 15%,var(--line) 85%,transparent)}
+.eb{
+  display:inline-flex;align-items:center;gap:11px;
+  font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--green);
+}
+.eb::before{content:"";width:8px;height:8px;border-radius:2.5px;background:var(--green);flex:none}
+h2{margin-top:20px;font-size:clamp(30px,4.4vw,52px);font-weight:600;letter-spacing:-.035em;line-height:1.08;text-wrap:balance}
+.sub{margin-top:16px;max-width:54ch;font-size:clamp(15.5px,1.7vw,19px);font-weight:300;color:var(--mut);line-height:1.52}
+
+/* ───────── índice de slides ───────── */
+.block-head{display:flex;align-items:baseline;gap:16px;margin:56px 0 22px}
+.block-head .n{font-size:13px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.block-head b{font-size:21px;font-weight:600;letter-spacing:-.025em}
+.block-head span{font-size:14.5px;color:var(--dim);font-weight:400}
+@media(max-width:620px){.block-head{flex-wrap:wrap;gap:6px 14px}.block-head span{flex-basis:100%}}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px}
+.slide-card{
+  position:relative;display:flex;flex-direction:column;gap:9px;
+  padding:22px 22px 24px;border:1px solid var(--line);border-radius:18px;background:var(--card);
+  text-align:left;overflow:hidden;cursor:pointer;
+  transition:border-color .3s,background .3s,transform .3s var(--ease);
+}
+.slide-card::after{
+  content:"";position:absolute;left:0;top:0;height:2px;width:100%;
+  background:linear-gradient(90deg,var(--gdk),var(--glt));
+  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);
+}
+.slide-card:hover,.slide-card:focus-visible{
+  border-color:rgba(61,190,116,.48);background:rgba(61,190,116,.06);transform:translateY(-3px);outline:none;
+}
+.slide-card:hover::after,.slide-card:focus-visible::after{transform:scaleX(1)}
+.slide-card .top{display:flex;align-items:center;gap:10px}
+.slide-card .num{font-size:12.5px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.slide-card .kind{
+  margin-left:auto;font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:3px 7px;
+}
+.slide-card .kind[data-k="video"]{color:var(--glt);border-color:rgba(61,190,116,.4)}
+.slide-card b{font-size:17.5px;font-weight:600;letter-spacing:-.025em;line-height:1.22}
+.slide-card p{font-size:14px;color:var(--mut);font-weight:300;line-height:1.42}
+
+/* ───────── proyección ───────── */
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(236px,1fr));gap:14px;margin-top:48px}
+.how .c{padding:28px 26px 30px;border:1px solid var(--line);border-radius:20px;background:var(--card)}
+.how .chip{
+  width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  border:1.5px solid rgba(61,190,116,.5);background:rgba(61,190,116,.08);margin-bottom:20px;
+}
+.how .chip svg{width:22px;height:22px;stroke:var(--green);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.how .c>b{display:block;font-size:17.5px;font-weight:600;letter-spacing:-.022em;margin-bottom:8px}
+.how p b{font-weight:600;color:var(--ink)}
+.how p{font-size:14.5px;color:var(--mut);font-weight:300;line-height:1.5}
+.how p+p{margin-top:10px}
+
+.shortcuts{margin-top:46px;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden}
+.shortcuts .row{display:flex;align-items:center;gap:20px;padding:17px 26px;font-size:15px;border-top:1px solid var(--line)}
+.shortcuts .row:first-child{border-top:none}
+.shortcuts .row .k{flex:none;min-width:190px;display:flex;flex-wrap:wrap;gap:6px}
+.shortcuts .row span{color:var(--mut);font-weight:300}
+@media(max-width:620px){.shortcuts .row{flex-direction:column;align-items:flex-start;gap:9px;padding:16px 20px}.shortcuts .row .k{min-width:0}}
+
+/* ───────── cierre ───────── */
+.close-band{position:relative;overflow:hidden;text-align:center}
+.close-band .halo{top:50%;width:min(900px,120vw)}
+.close-band .wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.close-band h2{max-width:18ch}
+.close-band .sub{text-align:center}
+.close-band .cta{justify-content:center}
+
+footer{border-top:1px solid var(--line);padding:38px 0 48px}
+footer .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;font-size:13.5px;color:var(--dim)}
+footer .brand{font-size:17px;color:var(--mut)}
+footer .brand .iso{width:19px;height:19px}
+footer .sep{margin-left:auto}
+
+/* ───────── visor ───────── */
+.viewer{
+  position:fixed;inset:0;z-index:100;background:#000;
+  display:none;opacity:0;transition:opacity .35s var(--ease);
+}
+.viewer[data-open]{display:block}
+.viewer[data-visible]{opacity:1}
+.viewer iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+.vbar{
+  position:absolute;z-index:3;left:50%;bottom:16px;transform:translate(-50%,0);
+  display:flex;align-items:center;gap:6px;padding:7px;
+  border-radius:16px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(14,16,15,.82);backdrop-filter:blur(16px);
+  box-shadow:0 24px 60px -24px rgba(0,0,0,.9);
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s var(--ease);
+}
+.viewer[data-chrome] .vbar{opacity:1;pointer-events:auto}
+.vbar button{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  height:40px;min-width:40px;padding:0 12px;border-radius:11px;
+  font-size:14px;font-weight:600;color:#D9DEDB;transition:background .2s,color .2s;
+}
+.vbar button:hover{background:rgba(61,190,116,.16);color:#fff}
+.vbar button svg{width:17px;height:17px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.vbar .pos{
+  padding:0 14px;font-size:13.5px;font-weight:600;color:var(--mut);font-variant-numeric:tabular-nums;
+  letter-spacing:.02em;white-space:nowrap;
+}
+.vbar .div{width:1px;height:22px;background:rgba(255,255,255,.12);margin:0 4px}
+.vbar .x:hover{background:rgba(255,80,80,.18);color:#ffb0b0}
+.vhint{
+  position:absolute;z-index:3;left:50%;top:22px;transform:translateX(-50%);
+  padding:9px 16px;border-radius:11px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(14,16,15,.82);backdrop-filter:blur(16px);
+  font-size:13px;color:#D9DEDB;font-weight:400;white-space:nowrap;
+  box-shadow:0 18px 44px -20px rgba(0,0,0,.95);
+  animation:vh 5s var(--ease) both;pointer-events:none;
+}
+
+.vhint b{color:var(--glt);font-weight:600}
+@keyframes vh{0%{opacity:0;transform:translate(-50%,-10px)}12%,74%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-6px)}}
+@media(max-width:620px){.vbar{bottom:16px}.vbar .lbl{display:none}.vhint{display:none}}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="iso" viewBox="0 0 140 140">
+  <rect class="brk" style="--i:0" x="6"  y="92" width="39" height="36" rx="7"/>
+  <rect class="brk" style="--i:1" x="50" y="92" width="43" height="36" rx="7"/>
+  <rect class="brk" style="--i:2" x="6"  y="51" width="24" height="36" rx="7"/>
+  <rect class="brk" style="--i:3" x="35" y="51" width="52" height="36" rx="7"/>
+  <rect class="brk" style="--i:4" x="92" y="51" width="42" height="36" rx="7"/>
+  <rect class="brk" style="--i:5" x="6"  y="10" width="39" height="36" rx="7"/>
+  <rect class="brk" style="--i:6" x="50" y="10" width="39" height="36" rx="7"/>
+  <rect class="brk" style="--i:7" x="94" y="10" width="40" height="36" rx="7"/>
+  <rect class="brk" style="--i:8" x="98" y="92" width="36" height="36" rx="7" fill="#3DBE74"/>
+</symbol>
+</defs></svg>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><svg class="iso" fill="#fff" aria-hidden="true"><use href="#iso"/></svg>basis</a>
+    <div class="meta">
+      <span class="date">Presentación · 5 de octubre</span>
+      <button class="btn btn-p btn-sm" data-open-deck="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"/></svg>
+        Proyectar
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- ───────── HERO ───────── -->
+<header class="hero">
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="halo" aria-hidden="true"></div>
+  <div class="wrap">
+    <svg class="hero-iso in" style="--d:0" fill="#fff" aria-label="Isotipo de basis"><use href="#iso"/></svg>
+    <h1 class="in" style="--d:2">El agente que lleva<br>tu obra <span class="g">entera</span>.</h1>
+    <p class="lead in" style="--d:4">
+      Presupuestos, mediciones, certificaciones y planificación, hablando.
+      <b>La IA no se inventa tus precios: aprende los tuyos.</b>
+    </p>
+    <div class="cta in" style="--d:6">
+      <button class="btn btn-p" data-open-deck="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"/></svg>
+        Proyectar presentación
+      </button>
+      <a class="btn btn-s" href="presentacion/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+        Abrir en pestaña nueva
+      </a>
+    </div>
+    <div class="keys in" style="--d:8">
+      <span><kbd>←</kbd><kbd>→</kbd>pasar slide</span>
+      <span><kbd>F</kbd>pantalla completa</span>
+      <span><kbd>R</kbd>volver al inicio</span>
+      <span><kbd>Esc</kbd>salir</span>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><i></i>Índice</div>
+</header>
+
+<div class="rule"></div>
+
+<!-- ───────── ÍNDICE ───────── -->
+<section class="band" id="indice">
+  <div class="wrap">
+    <span class="eb">Índice · 19 slides</span>
+    <h2>Toda la presentación,<br>y el salto directo a cualquier punto.</h2>
+    <p class="sub">Pulsa cualquier slide y la proyección arranca justo ahí. Pensado para cuando alguien pregunta por los precios antes de tiempo.</p>
+
+    <div class="block-head">
+      <span class="n">01</span><b>Demo de basis</b><span>Qué es y cómo funciona.</span>
+    </div>
+    <div class="grid" id="grid-1"></div>
+
+    <div class="block-head">
+      <span class="n">02</span><b>Oportunidad de negocio</b><span>Para quien quiera ir más allá.</span>
+    </div>
+    <div class="grid" id="grid-2"></div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ───────── PROYECTAR ───────── -->
+<section class="band" id="proyectar">
+  <div class="wrap">
+    <span class="eb">Sala y proyector</span>
+    <h2>Lista para enchufar y presentar.</h2>
+    <p class="sub">La presentación se escala sola a cualquier pantalla: 16:9 nativo, letterbox automático y sin recortes. Da igual el proyector de la sala.</p>
+
+    <div class="how">
+      <div class="c">
+        <div class="chip"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7V5z"/></svg></div>
+        <b>Proyecta</b>
+        <p>Pulsa <b>Proyectar</b> y entra a pantalla completa. Sin barras, sin miniaturas, sin nada que distraiga: solo la slide.</p>
+      </div>
+      <div class="c">
+        <div class="chip"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></div>
+        <b>Avanza</b>
+        <p>Flechas, barra espaciadora o el mando del clicker: cualquiera de los tres pasa de slide. Los números del 1 al 9 saltan directos.</p>
+      </div>
+      <div class="c">
+        <div class="chip"><svg viewBox="0 0 24 24"><path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div>
+        <b>Vídeos con sonido</b>
+        <p>Dos slides llevan vídeo y arrancan solas al entrar. Sube el volumen de la sala antes de empezar.</p>
+        <p>Si el navegador silencia el primero, un clic sobre el vídeo lo reactiva.</p>
+      </div>
+      <div class="c">
+        <div class="chip"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg></div>
+        <b>Copia en PDF</b>
+        <p>Abre la presentación en pestaña nueva e imprime: sale una slide por página, lista para mandar después de la reunión.</p>
+      </div>
+    </div>
+
+    <div class="shortcuts">
+      <div class="row"><span class="k"><kbd>→</kbd><kbd>Espacio</kbd><kbd>AvPág</kbd></span><span>Siguiente slide</span></div>
+      <div class="row"><span class="k"><kbd>←</kbd><kbd>RePág</kbd></span><span>Slide anterior</span></div>
+      <div class="row"><span class="k"><kbd>1</kbd>…<kbd>9</kbd></span><span>Salto directo a esa slide</span></div>
+      <div class="row"><span class="k"><kbd>F</kbd></span><span>Entrar o salir de pantalla completa</span></div>
+      <div class="row"><span class="k"><kbd>R</kbd></span><span>Volver a la portada</span></div>
+      <div class="row"><span class="k"><kbd>Esc</kbd></span><span>Salir de la proyección y volver aquí</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ───────── CIERRE ───────── -->
+<section class="band close-band">
+  <div class="halo" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="eb">Cuando quieras</span>
+    <h2>Tú hablas.<br><span class="g">basis</span> trabaja.</h2>
+    <p class="sub">19 slides, dos vídeos y una demo en directo. Apaga la luz y dale.</p>
+    <div class="cta">
+      <button class="btn btn-p" data-open-deck="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z" fill="currentColor" stroke="none"/></svg>
+        Empezar la presentación
+      </button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><svg class="iso" fill="#A8A8A8" aria-hidden="true"><use href="#iso"/></svg>basis</span>
+    <span>El primer agente de obra.</span>
+    <span class="sep">Presentación del 5 de octubre</span>
+  </div>
+</footer>
+
+<!-- ───────── VISOR ───────── -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Presentación de basis">
+  <div class="vhint" id="vhint">← → para pasar · <b>F</b> pantalla completa · <b>Esc</b> para salir</div>
+  <div class="vbar" id="vbar">
+    <button id="v-prev" title="Slide anterior (←)" aria-label="Slide anterior">
+      <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <span class="pos" id="v-pos">1 / 19</span>
+    <button id="v-next" title="Siguiente slide (→)" aria-label="Siguiente slide">
+      <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <span class="div"></span>
+    <button id="v-fs" title="Pantalla completa (F)">
+      <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      <span class="lbl">Pantalla completa</span>
+    </button>
+    <button id="v-close" class="x" title="Salir (Esc)">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <span class="lbl">Salir</span>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ════════ índice de slides ════════
+   Refleja el orden real del deck en presentacion/index.html.
+   Si la landing se sirve por HTTP, SYNC() revalida las etiquetas
+   contra el deck para que el índice nunca se quede desfasado. */
+const SLIDES = [
+  {n:1,  b:1, t:'Portada',                  d:'El isotipo de basis entrando en pantalla.'},
+  {n:2,  b:1, t:'Una nueva forma',          d:'Lo que verás ahora es una nueva forma de innovar la construcción y la reforma.'},
+  {n:3,  b:1, t:'Las dos partes',           d:'01 Demo de basis · 02 Oportunidad de negocio.'},
+  {n:4,  b:1, t:'Romper el hielo',          d:'Tres preguntas al equipo sobre presupuestos, horarios y clientes perdidos.'},
+  {n:5,  b:1, t:'Tú hablas. basis trabaja.',d:'Qué es basis y cómo funciona el agente.'},
+  {n:6,  b:1, t:'Vuestro día a día',        d:'Preguntas al equipo, respondidas en el chat.'},
+  {n:7,  b:1, t:'Un presupuesto en minutos',d:'¿Qué os parece hacer un presupuesto en un par de minutos?'},
+  {n:8,  b:1, t:'Vídeo de basis',           d:'El agente en acción.', k:'vídeo'},
+  {n:9,  b:1, t:'Demostración en directo',  d:'Recorrido por la plataforma.'},
+  {n:10, b:1, t:'10 horas a la semana',     d:'Si os devolviese 10 horas a la semana, ¿qué haríais con ellas?'},
+  {n:11, b:1, t:'Lo que ya funciona',       d:'Lo que tenemos hoy en producción.'},
+  {n:12, b:1, t:'Lo que viene',             d:'El roadmap de producto.'},
+  {n:13, b:1, t:'Activa lo que necesitas',  d:'Packs y suscripción mensual.'},
+  {n:14, b:1, t:'7 días gratis',            d:'Prueba basis completo, sin tarjeta. Turno de preguntas con cuenta atrás.'},
+  {n:15, b:1, t:'Poned un OK',              d:'Dos preguntas para medir quién quiere formar parte.'},
+  {n:16, b:2, t:'Solo para quien quiera',   d:'Arranca la segunda parte: la oportunidad.'},
+  {n:17, b:2, t:'Vídeo prestamistas',       d:'La segunda pieza en vídeo.', k:'vídeo'},
+  {n:18, b:2, t:'Tres planetas alineados',  d:'La alineación que hace que esto ocurra ahora.'},
+  {n:19, b:2, t:'Reunión privada',          d:'El siguiente paso, uno a uno.'},
+];
+const TOTAL = SLIDES.length;
+
+(() => {
+  const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const render = () => {
+    [1,2].forEach(b => {
+      document.getElementById('grid-' + b).innerHTML = SLIDES.filter(s => s.b === b).map(s => `
+        <button class="slide-card" data-open-deck="${s.n}">
+          <span class="top">
+            <span class="num">${String(s.n).padStart(2,'0')}</span>
+            ${s.k ? `<span class="kind" data-k="video">${esc(s.k)}</span>` : ''}
+          </span>
+          <b>${esc(s.t)}</b>
+          <p>${esc(s.d)}</p>
+        </button>`).join('');
+    });
+  };
+  render();
+
+  /* Revalidación opcional: sólo corre servido por HTTP, nunca en file://. */
+  if (location.protocol.startsWith('http')) {
+    fetch('presentacion/index.html').then(r => r.ok ? r.text() : Promise.reject())
+      .then(html => {
+        const labels = [...html.matchAll(/<section[^>]*\sdata-label="([^"]+)"/g)].map(m => m[1]);
+        if (!labels.length || labels.length === TOTAL) return;
+        // El deck cambió de número de slides: el índice escrito a mano ya no
+        // es fiable, así que lo reconstruimos con las etiquetas reales.
+        SLIDES.length = 0;
+        labels.forEach((l, i) => SLIDES.push({ n: i + 1, b: 1, t: l, d: '' }));
+        document.getElementById('grid-2').previousElementSibling.style.display = 'none';
+        render();
+      }).catch(() => {});
+  }
+})();
+
+/* ════════ fondo: campo de partículas (mismo lenguaje que el deck) ════════ */
+(() => {
+  const cv = document.getElementById('fx');
+  if (!cv || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = cv.getContext('2d');
+  let W = 0, H = 0, P = [], raf = 0, visible = true;
+  const mouse = { x: -9999, y: -9999 };
+
+  const resize = () => {
+    const r = cv.getBoundingClientRect();
+    W = cv.width = Math.round(r.width); H = cv.height = Math.round(r.height);
+    const target = Math.min(108, Math.round(W * H / 15500));
+    P = Array.from({ length: target }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .34, vy: (Math.random() - .5) * .34,
+      r: .7 + Math.random() * .9,
+    }));
+  };
+
+  const D2 = 104 * 104, M2 = 150 * 150;
+  const frame = () => {
+    raf = requestAnimationFrame(frame);
+    if (!visible || !W) return;
+    ctx.clearRect(0, 0, W, H);
+    for (const p of P) {
+      const dx = p.x - mouse.x, dy = p.y - mouse.y, d = dx * dx + dy * dy;
+      if (d < M2) { const m = Math.sqrt(d) || 1; p.vx += dx / m * .09; p.vy += dy / m * .09; }
+      const sp = Math.hypot(p.vx, p.vy);
+      if (sp > .85) { p.vx *= .85 / sp; p.vy *= .85 / sp; }
+      if (sp < .07) { p.vx += (Math.random() - .5) * .12; p.vy += (Math.random() - .5) * .12; }
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -12) p.x = W + 12; else if (p.x > W + 12) p.x = -12;
+      if (p.y < -12) p.y = H + 12; else if (p.y > H + 12) p.y = -12;
+    }
+    ctx.lineWidth = .7; ctx.strokeStyle = 'rgba(61,190,116,.15)'; ctx.beginPath();
+    for (let i = 0; i < P.length; i++)
+      for (let j = i + 1; j < P.length; j++) {
+        const a = P[i], b = P[j], dx = a.x - b.x, dy = a.y - b.y;
+        if (dx * dx + dy * dy < D2) { ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); }
+      }
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(107,226,154,.26)'; ctx.beginPath();
+    for (const a of P) {
+      const dx = a.x - mouse.x, dy = a.y - mouse.y;
+      if (dx * dx + dy * dy < 22000) { ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); }
+    }
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(140,236,178,.72)'; ctx.beginPath();
+    for (const p of P) { ctx.moveTo(p.x + p.r, p.y); ctx.arc(p.x, p.y, p.r, 0, 6.283); }
+    ctx.fill();
+  };
+
+  addEventListener('resize', resize, { passive: true });
+  addEventListener('mousemove', e => {
+    const r = cv.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  }, { passive: true });
+  // El hero sale de pantalla al bajar: paramos de pintar para no gastar batería.
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(cv);
+  resize(); frame();
+})();
+
+/* ════════ nav pegajosa ════════ */
+(() => {
+  const nav = document.getElementById('nav');
+  const sync = () => nav.toggleAttribute('data-stuck', scrollY > 24);
+  addEventListener('scroll', sync, { passive: true }); sync();
+})();
+
+/* ════════ visor de la presentación ════════
+   El deck vive intacto en su propio documento dentro de un <iframe>:
+   así conserva su CSS, sus animaciones y su escalado sin que nada de
+   la landing lo toque. La comunicación usa la API pública del
+   componente <deck-stage>: postMessage(__omelette_presenting) para
+   esconder la interfaz de autor, y goTo()/slidechange para navegar. */
+(() => {
+  const viewer  = document.getElementById('viewer');
+  const bar     = document.getElementById('vbar');
+  const hint    = document.getElementById('vhint');
+  const posEl   = document.getElementById('v-pos');
+  const DECK_URL = 'presentacion/index.html';
+
+  let frame = null;   // el <iframe>
+  let deck  = null;   // el elemento <deck-stage> dentro del iframe
+  let chromeTimer = 0;
+  let lastFocus = null;
+  let overBar = false;
+
+  const clamp = n => Math.max(1, Math.min(TOTAL, n | 0));
+
+  /* La barra flotante aparece al mover el ratón y se esconde sola. */
+  const showChrome = () => {
+    viewer.setAttribute('data-chrome', '');
+    clearTimeout(chromeTimer);
+    // Con el ratón sobre la barra no se esconde: si la estás usando, se queda.
+    chromeTimer = setTimeout(() => {
+      if (overBar) return showChrome();
+      viewer.removeAttribute('data-chrome');
+    }, 3200);
+  };
+
+  const setPos = i => { posEl.textContent = (i + 1) + ' / ' + TOTAL; };
+
+  /* Se engancha al deck una vez el iframe ha cargado. Todo va en try/catch:
+     abierto con file:// el navegador bloquea el acceso al documento del
+     iframe, y en ese caso el visor sigue funcionando con teclado. */
+  const attach = startAt => {
+    try {
+      const win = frame.contentWindow, doc = frame.contentDocument;
+      deck = doc.querySelector('deck-stage');
+      if (!deck) return;
+
+      // Modo presentación: sin rail de miniaturas ni overlay de autor.
+      win.postMessage({ __omelette_presenting: true }, '*');
+
+      deck.addEventListener('slidechange', e => setPos(e.detail.index));
+      setPos(deck.index || 0);
+      if (startAt > 1) deck.goTo(startAt - 1);
+
+      // El ratón dentro del iframe también despierta la barra, y Escape
+      // cierra el visor esté donde esté el foco.
+      doc.addEventListener('mousemove', showChrome, { passive: true });
+      doc.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !document.fullscreenElement) { e.preventDefault(); close(); }
+        else showChrome();
+      });
+      win.focus();
+    } catch (err) {
+      // Sin acceso al documento del iframe: navegación por teclado dentro
+      // del propio deck. Los botones de la barra dejan de poder ayudar.
+      deck = null;
+      posEl.textContent = '—';
+    }
+  };
+
+  const open = (n = 1) => {
+    const startAt = clamp(n);
+    lastFocus = document.activeElement;
+    viewer.setAttribute('data-open', '');
+    document.body.classList.add('locked');
+    requestAnimationFrame(() => viewer.setAttribute('data-visible', ''));
+
+    if (deck) {                       // ya cargado: salto directo
+      try { deck.goTo(startAt - 1); frame.contentWindow.focus(); } catch (e) {}
+    } else if (frame) {               // cargado sin acceso: recarga con hash
+      frame.src = DECK_URL + '#' + startAt;
+    } else {                          // primera vez: montamos el iframe
+      frame = document.createElement('iframe');
+      frame.title = 'Presentación de basis';
+      frame.allow = 'fullscreen; autoplay; encrypted-media';
+      frame.setAttribute('allowfullscreen', '');
+      frame.addEventListener('load', () => attach(startAt), { once: true });
+      frame.src = DECK_URL + '#' + startAt;
+      viewer.appendChild(frame);
+    }
+
+    // Reiniciamos la animación del aviso de atajos en cada apertura.
+    hint.style.animation = 'none'; void hint.offsetWidth; hint.style.animation = '';
+    showChrome();
+    goFullscreen();
+  };
+
+  const close = () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    viewer.removeAttribute('data-visible');
+    document.body.classList.remove('locked');
+    setTimeout(() => {
+      viewer.removeAttribute('data-open');
+      // Paramos los vídeos: salir del visor no debe dejar audio sonando.
+      try { frame.contentDocument.querySelectorAll('video').forEach(v => v.pause()); } catch (e) {}
+    }, 350);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  };
+
+  const goFullscreen = () => {
+    if (document.fullscreenElement) return;
+    const req = viewer.requestFullscreen || viewer.webkitRequestFullscreen;
+    if (req) req.call(viewer).catch(() => {});
+  };
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else goFullscreen();
+  };
+
+  const step = d => { try { deck && deck.goTo(deck.index + d); } catch (e) {} };
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-open-deck]');
+    if (t) { e.preventDefault(); open(+t.dataset.openDeck); }
+  });
+
+  document.getElementById('v-prev').addEventListener('click', () => { step(-1); showChrome(); });
+  document.getElementById('v-next').addEventListener('click', () => { step(1);  showChrome(); });
+  document.getElementById('v-fs').addEventListener('click', toggleFullscreen);
+  document.getElementById('v-close').addEventListener('click', close);
+  viewer.addEventListener('mousemove', showChrome, { passive: true });
+  bar.addEventListener('mouseenter', () => { overBar = true;  showChrome(); });
+  bar.addEventListener('mouseleave', () => { overBar = false; showChrome(); });
+
+  // Teclas cuando el foco está en la landing y no dentro del iframe.
+  addEventListener('keydown', e => {
+    if (!viewer.hasAttribute('data-open')) return;
+    if (e.key === 'Escape' && !document.fullscreenElement) { e.preventDefault(); close(); }
+    else if (e.key === 'ArrowRight' || e.key === 'PageDown') { step(1);  showChrome(); }
+    else if (e.key === 'ArrowLeft'  || e.key === 'PageUp')   { step(-1); showChrome(); }
+    else if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+  });
+
+  // Salir de pantalla completa con Esc cierra el visor del todo.
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && viewer.hasAttribute('data-open')) close();
+  });
+
+  // #slide-7 en la URL de la landing abre la presentación en esa slide.
+  const deepLink = () => {
+    const m = (location.hash || '').match(/^#slide-(\d+)$/);
+    if (m) open(+m[1]);
+  };
+  addEventListener('hashchange', deepLink);
+  deepLink();
+})();
+</script>
+</body>
+</html>
