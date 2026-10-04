@@ -11,7 +11,7 @@ presentacion/           La presentación, tal cual
   deck-stage.js         Componente que escala, navega e imprime el deck
   image-slot.js
   present-keys.js       Tecla F para pantalla completa
-  video-preload.js      Carga cada vídeo al acercarse y suelta el que se aleja
+  video-preload.js      Trae cada vídeo cuando se acerca su slide
   prestamistas-fx2.js   Partículas, isotipo, contadores y vídeos
   assets/               Vídeos, imagen del agente y la tipografía Inter
 ```
@@ -83,14 +83,16 @@ El resultado funciona entero sin conexión, vídeos incluidos.
 
 ## Nota sobre los vídeos
 
-Pesan unos 17 MB cada uno. Venían con `preload="auto"`, así que el navegador
-se traía los dos nada más abrir la presentación: 35 MB antes de ver la
-primera slide. Con datos móviles eso tumbaba la pestaña en el iPhone
-("ha generado problemas repetidamente"). Ahora `video-preload.js` prepara
-cada vídeo cuando la presentación llega a la slide anterior y suelta el que
-queda lejos, así que la apertura descarga 1,3 MB y nunca hay dos vídeos en
-memoria a la vez. Al proyectar no se nota: el vídeo se carga mientras se
-habla de la slide anterior.
+Pesan unos 17 MB cada uno y venían con `preload="auto"`, que le dice al
+navegador que se los traiga enteros antes de hacer falta. Ahora salen con
+`preload="metadata"` —unos kilobytes de cabecera— y `video-preload.js` sube a
+`auto` el de la slide siguiente, para que se vaya trayendo mientras se habla
+de la anterior. Abrir la presentación transfiere 1,8 MB.
+
+El src de los `<video>` no se toca nunca. Quitarlo y reponerlo parece el modo
+evidente de liberar memoria, pero deja al elemento como recién creado y
+Safari le retira el permiso de reproducir que traía del primer toque: el
+vídeo se queda en negro.
 
 Las slides 8 y 17 arrancan solas con sonido al entrar. El
 navegador exige una interacción previa para permitir audio automático: al

@@ -44,15 +44,15 @@ function activate(s){
     for(let i=0;i<90;i++){const a=rnd(0,6.283),v=rnd(1,6);B.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:1,r:rnd(.6,1.6)});}}
   s.querySelectorAll('.count').forEach(countUp);
   const v=s.querySelector('video');
-  if(v){v.currentTime=0;v.muted=false;v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});}
+  if(v){try{v.currentTime=0;}catch(e){}v.muted=false;v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});}
 }
-stage.addEventListener('slidechange',e=>{const s=e.detail.slide||secs[e.detail.index];if(s)activate(s);});
+stage.addEventListener('slidechange',e=>{const s=e.detail.slide||secs[e.detail.index];if(s){try{activate(s);}catch(err){active=s;}}});
 
 const D2=80*80;let skip=false;
 function frame(){
   skip=!skip;if(skip){requestAnimationFrame(frame);return;}
   const s=stage.querySelector(':scope > section[data-deck-active]');
-  if(s&&s!==active)activate(s);
+  if(s&&s!==active){try{activate(s);}catch(e){active=s;}}
   if(active&&cv.isConnected){
     ctx.clearRect(0,0,W,H);
     const orbit=mode.includes('orbit'),flow=mode.includes('flow');
