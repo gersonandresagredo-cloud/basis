@@ -33,6 +33,19 @@ completa, sin miniaturas ni barras: solo la slide. Cualquier tarjeta del
 La presentación es 1920×1080 y se escala sola a la pantalla que tenga la sala,
 con letterbox y sin recortes.
 
+## En el móvil
+
+El visor detecta la pantalla táctil y cambia tres cosas: gira la presentación
+90° cuando el teléfono está en vertical, para que la slide llene la pantalla
+en lugar de quedarse en una franja; deja la barra de control siempre a la
+vista, porque sin ratón no hay forma de hacer volver una barra escondida; y
+añade dos franjas de paso en los laterales.
+
+Esas franjas no son un adorno: la slide 12 lleva tarjetas clicables que se
+quedan con el toque antes de que la presentación lo reciba, así que tocando
+el centro no se pasaba de página. Por los lados se pasa siempre, en cualquier
+slide. Al poner el teléfono en horizontal, la rotación se quita sola.
+
 **Enlace directo a una slide:** `index.html#slide-13` abre la landing y entra
 en la slide 13. La presentación suelta también acepta `presentacion/#13`.
 

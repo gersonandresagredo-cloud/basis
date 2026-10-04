@@ -197,7 +197,22 @@ footer .sep{margin-left:auto}
 }
 .viewer[data-open]{display:block}
 .viewer[data-visible]{opacity:1}
+
+/* Todo el visor vive dentro de .vstage. En un móvil en vertical la slide 16:9
+   queda en una tira diminuta, así que el escenario entero se gira 90°: la
+   presentación llena la pantalla y basta con girar el teléfono para verla.
+   El tamaño lo fija el JS en píxeles — 100vw/100vh mienten con la barra del
+   navegador. Al poner el móvil en horizontal la rotación se quita sola. */
+.vstage{position:absolute;inset:0}
+.vstage[data-rot]{inset:auto;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center}
 .viewer iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+
+/* Franjas de paso en los laterales, solo en pantallas táctiles. Son la red de
+   seguridad: hay slides cuyo contenido es clicable y se come el toque antes de
+   que la presentación lo reciba (la 12), y ahí el dedo no pasaba de página. */
+.vtap{position:absolute;top:0;bottom:0;width:15%;z-index:2;display:none;background:none;-webkit-tap-highlight-color:transparent}
+.vtap.l{left:0}.vtap.r{right:0}
+@media (hover:none){.viewer[data-open] .vtap{display:block}}
 .vbar{
   position:absolute;z-index:3;left:50%;bottom:16px;transform:translate(-50%,0);
   display:flex;align-items:center;gap:6px;padding:7px;
@@ -207,6 +222,9 @@ footer .sep{margin-left:auto}
   opacity:0;pointer-events:none;transition:opacity .3s,transform .3s var(--ease);
 }
 .viewer[data-chrome] .vbar{opacity:1;pointer-events:auto}
+/* Sin ratón no hay forma de hacer volver una barra escondida, y sin barra no
+   se puede salir ni pasar de una slide atascada: en táctil se queda fija. */
+@media (hover:none){.viewer[data-open] .vbar{opacity:1;pointer-events:auto}}
 .vbar button{
   display:flex;align-items:center;justify-content:center;gap:8px;
   height:40px;min-width:40px;padding:0 12px;border-radius:11px;
@@ -398,6 +416,9 @@ footer .sep{margin-left:auto}
 
 <!-- ───────── VISOR ───────── -->
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Presentación de basis">
+ <div class="vstage" id="vstage">
+  <button class="vtap l" id="v-tap-prev" aria-label="Slide anterior" tabindex="-1"></button>
+  <button class="vtap r" id="v-tap-next" aria-label="Siguiente slide" tabindex="-1"></button>
   <div class="vhint" id="vhint">← → para pasar · <b>F</b> pantalla completa · <b>Esc</b> para salir</div>
   <div class="vbar" id="vbar">
     <button id="v-prev" title="Slide anterior (←)" aria-label="Slide anterior">
@@ -417,6 +438,7 @@ footer .sep{margin-left:auto}
       <span class="lbl">Salir</span>
     </button>
   </div>
+ </div>
 </div>
 
 <script>
@@ -557,6 +579,7 @@ const TOTAL = SLIDES.length;
    esconder la interfaz de autor, y goTo()/slidechange para navegar. */
 (() => {
   const viewer  = document.getElementById('viewer');
+  const stage   = document.getElementById('vstage');
   const bar     = document.getElementById('vbar');
   const hint    = document.getElementById('vhint');
   const posEl   = document.getElementById('v-pos');
@@ -567,6 +590,7 @@ const TOTAL = SLIDES.length;
   let chromeTimer = 0;
   let lastFocus = null;
   let overBar = false;
+  const TOUCH = matchMedia('(hover:none)');
 
   const clamp = n => Math.max(1, Math.min(TOTAL, n | 0));
 
@@ -574,6 +598,7 @@ const TOTAL = SLIDES.length;
   const showChrome = () => {
     viewer.setAttribute('data-chrome', '');
     clearTimeout(chromeTimer);
+    if (TOUCH.matches) return;   // en táctil la barra es fija: ver el CSS
     // Con el ratón sobre la barra no se esconde: si la estás usando, se queda.
     chromeTimer = setTimeout(() => {
       if (overBar) return showChrome();
@@ -582,6 +607,23 @@ const TOTAL = SLIDES.length;
   };
 
   const setPos = i => { posEl.textContent = (i + 1) + ' / ' + TOTAL; };
+
+  /* Gira el escenario cuando el hueco es más alto que ancho y estamos en un
+     móvil o tablet: una slide 16:9 metida en una pantalla vertical se queda en
+     una franja ilegible. Girada ocupa la pantalla entera. */
+  const fitStage = () => {
+    const r = viewer.getBoundingClientRect();
+    if (!r.width) return;
+    const rot = r.height > r.width && Math.min(r.width, r.height) <= 700 && TOUCH.matches;
+    if (rot) {
+      stage.setAttribute('data-rot', '');
+      stage.style.width  = r.height + 'px';
+      stage.style.height = r.width  + 'px';
+    } else {
+      stage.removeAttribute('data-rot');
+      stage.style.width = stage.style.height = '';
+    }
+  };
 
   /* Se engancha al deck una vez el iframe ha cargado. Todo va en try/catch:
      abierto con file:// el navegador bloquea el acceso al documento del
@@ -633,13 +675,19 @@ const TOTAL = SLIDES.length;
       frame.setAttribute('allowfullscreen', '');
       frame.addEventListener('load', () => attach(startAt), { once: true });
       frame.src = DECK_URL + '#' + startAt;
-      viewer.appendChild(frame);
+      // Al fondo del escenario: así la rotación le afecta y las franjas de
+      // paso y la barra quedan por encima de él.
+      stage.insertBefore(frame, stage.firstChild);
     }
 
     // Reiniciamos la animación del aviso de atajos en cada apertura.
+    if (TOUCH.matches) hint.innerHTML = 'Toca los lados para pasar · <b>\u2715</b> para salir';
     hint.style.animation = 'none'; void hint.offsetWidth; hint.style.animation = '';
+    fitStage();
     showChrome();
     goFullscreen();
+    // Tras entrar a pantalla completa el hueco cambia: hay que remedir.
+    setTimeout(fitStage, 350);
   };
 
   const close = () => {
@@ -674,6 +722,11 @@ const TOTAL = SLIDES.length;
 
   document.getElementById('v-prev').addEventListener('click', () => { step(-1); showChrome(); });
   document.getElementById('v-next').addEventListener('click', () => { step(1);  showChrome(); });
+  document.getElementById('v-tap-prev').addEventListener('click', () => { step(-1); showChrome(); });
+  document.getElementById('v-tap-next').addEventListener('click', () => { step(1);  showChrome(); });
+  addEventListener('resize', fitStage, { passive: true });
+  addEventListener('orientationchange', () => setTimeout(fitStage, 250));
+  document.addEventListener('fullscreenchange', () => setTimeout(fitStage, 120));
   document.getElementById('v-fs').addEventListener('click', toggleFullscreen);
   document.getElementById('v-close').addEventListener('click', close);
   viewer.addEventListener('mousemove', showChrome, { passive: true });
