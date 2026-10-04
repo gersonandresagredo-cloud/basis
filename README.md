@@ -11,6 +11,7 @@ presentacion/           La presentación, tal cual
   deck-stage.js         Componente que escala, navega e imprime el deck
   image-slot.js
   present-keys.js       Tecla F para pantalla completa
+  video-preload.js      Carga cada vídeo al acercarse y suelta el que se aleja
   prestamistas-fx2.js   Partículas, isotipo, contadores y vídeos
   assets/               Vídeos, imagen del agente y la tipografía Inter
 ```
@@ -82,7 +83,16 @@ El resultado funciona entero sin conexión, vídeos incluidos.
 
 ## Nota sobre los vídeos
 
-Las slides 8 y 17 llevan vídeo y arrancan solas con sonido al entrar. El
+Pesan unos 17 MB cada uno. Venían con `preload="auto"`, así que el navegador
+se traía los dos nada más abrir la presentación: 35 MB antes de ver la
+primera slide. Con datos móviles eso tumbaba la pestaña en el iPhone
+("ha generado problemas repetidamente"). Ahora `video-preload.js` prepara
+cada vídeo cuando la presentación llega a la slide anterior y suelta el que
+queda lejos, así que la apertura descarga 1,3 MB y nunca hay dos vídeos en
+memoria a la vez. Al proyectar no se nota: el vídeo se carga mientras se
+habla de la slide anterior.
+
+Las slides 8 y 17 arrancan solas con sonido al entrar. El
 navegador exige una interacción previa para permitir audio automático: al
 abrir desde el botón de la landing ya está dada. Si aun así entra silenciado,
 un clic sobre el vídeo lo reactiva. Sube el volumen de la sala antes de

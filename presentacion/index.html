@@ -537,7 +537,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 </section>
 
 <section class="dark" data-label="Vídeo basis" data-nofx>
-  <video class="vid" src="assets/basis-video-demo.mp4" playsinline preload="auto"></video>
+  <video class="vid" src="assets/basis-video-demo.mp4" playsinline preload="none"></video>
 </section>
 
 <section class="dark" data-label="Demostración de plataforma" data-fx="burst" data-bx="960" data-by="460">
@@ -667,7 +667,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 </section>
 
 <section class="dark" data-label="Vídeo ronda de financiación" data-nofx>
-  <video class="vid" src="assets/basis-video-ronda-financiacion.mp4" playsinline preload="auto"></video>
+  <video class="vid" src="assets/basis-video-ronda-financiacion.mp4" playsinline preload="none"></video>
 </section>
 
 <section class="dark" data-label="La alineación" data-nofx>
@@ -702,6 +702,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 <script src="deck-stage.js"></script>
 <script src="image-slot.js"></script>
 <script src="present-keys.js"></script>
+<script src="video-preload.js"></script>
 <script src="prestamistas-fx2.js"></script>
 <script>
 (()=>{try{document.querySelectorAll('[data-qr]').forEach(el=>{const q=qrcode(0,'H');q.addData(el.dataset.qr);q.make();el.innerHTML=q.createSvgTag({cellSize:8,margin:0,scalable:true});el.querySelectorAll('path,rect').forEach(e=>{if(e.getAttribute('fill')==='black'||e.getAttribute('fill')==='#000000')e.setAttribute('fill','#0A0A0A')});});}catch(e){}

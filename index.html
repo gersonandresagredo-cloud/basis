@@ -523,8 +523,8 @@ const TOTAL = SLIDES.length;
 
   const D2 = 104 * 104, M2 = 150 * 150;
   const frame = () => {
+    if (!visible || !W) { raf = 0; return; }   // fuera de pantalla no se pinta ni se encola
     raf = requestAnimationFrame(frame);
-    if (!visible || !W) return;
     ctx.clearRect(0, 0, W, H);
     for (const p of P) {
       const dx = p.x - mouse.x, dy = p.y - mouse.y, d = dx * dx + dy * dy;
@@ -560,7 +560,10 @@ const TOTAL = SLIDES.length;
     mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
   }, { passive: true });
   // El hero sale de pantalla al bajar: paramos de pintar para no gastar batería.
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(cv);
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible && !raf) frame();              // al volver a verse, se reanuda
+  }).observe(cv);
   resize(); frame();
 })();
 
@@ -698,6 +701,10 @@ const TOTAL = SLIDES.length;
       viewer.removeAttribute('data-open');
       // Paramos los vídeos: salir del visor no debe dejar audio sonando.
       try { frame.contentDocument.querySelectorAll('video').forEach(v => v.pause()); } catch (e) {}
+      // En el móvil la memoria es escasa, así que al salir se suelta la
+      // presentación entera en vez de dejarla montada; se vuelve a cargar al
+      // reabrir. En escritorio se queda, que reabrir al instante compensa.
+      if (TOUCH.matches && frame) { frame.remove(); frame = null; deck = null; }
     }, 350);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   };
