@@ -295,9 +295,15 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 .timer.sm .tm{font-size:150px}
 .timer.sm .tbar{width:420px}
 .fn.core b span{font-size:inherit;line-height:inherit}
-.pk2{display:flex;flex-direction:column;gap:10px;padding:26px 34px}
-.pk2 .pkh{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.pk2 .pkh b{font-size:31px;font-weight:600;letter-spacing:-.03em}
+/* overflow visible: la pastilla sobresale por arriba y .card la recortaba. */
+.pk2{display:flex;flex-direction:column;gap:9px;padding:28px 30px;overflow:visible}
+.pk2 .pkt{position:absolute;top:-15px;right:22px;font-size:17px;padding:6px 14px;
+  box-shadow:0 10px 24px -10px rgba(61,190,116,.9)}
+.pk2 .pkh{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pk2 .pkh b{font-size:34px;font-weight:600;letter-spacing:-.03em}
+.pkw{font-size:20px;font-weight:500;color:var(--gt);letter-spacing:-.01em}
+.pk2 .num{margin:2px 0 4px}
+.pk2 .inc{font-size:19px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
 .pkt{font-size:18px;font-weight:600;color:#06120B;background:var(--green);padding:6px 14px;border-radius:10px;white-space:nowrap}
 .pk2 p{font-size:22px;color:var(--mut);line-height:1.35}
 .seats{display:flex;gap:56px;align-items:center;padding-top:18px;border-top:1px solid var(--line);font-size:26px;color:var(--mut)}
@@ -606,18 +612,36 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
   <div class="orb" style="width:900px;height:900px;right:-300px;top:-350px"></div>
   <div class="pad" style="padding-top:84px">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px">
-      <div><span class="eb in" style="--d:0">Suscripción mensual</span><h2 class="rv" style="--d:1;margin-top:18px;font-size:68px">Activa <span class="g">lo que necesitas.</span></h2></div>
+      <div><span class="eb in" style="--d:0">Suscripción mensual</span><h2 class="rv" style="--d:1;margin-top:18px;font-size:68px">Un plan <span class="g">por cada tamaño.</span></h2></div>
       <span class="tag in" style="--d:2">Primera propuesta de precios</span>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:28px">
-      <div class="card pk2 in hi" style="--d:3"><div class="pkh"><b>Agente de presupuestos</b><span class="pkt">Puerta de entrada</span></div><span class="num g" style="font-size:68px"><span class="count">29</span><span class="u">€/mes</span></span><p>Presupuestador conversacional, plantillas, mediciones desde documento, BC3 y Excel.</p></div>
-      <div class="card pk2 in" style="--d:4"><div class="pkh"><b>Agente de obra</b></div><span class="num" style="font-size:68px"><span class="count">39</span><span class="u">€/mes</span></span><p>Gantt, partes, pedidos, albaranes, almacén, subcontratas, certificaciones y coste real.</p></div>
-      <div class="card pk2 in" style="--d:5"><div class="pkh"><b>Agente de administración</b></div><span class="num" style="font-size:68px"><span class="count">29</span><span class="u">€/mes</span></span><p>Facturación con VeriFactu, gastos, cobros y tesorería.</p></div>
-      <div class="card pk2 in" style="--d:6"><div class="pkh"><b>Agente de personal</b></div><span class="num" style="font-size:68px"><span class="count">2</span><span class="u">€/empleado</span></span><p>Control horario y exportación a nómina. Mínimo 10 €/mes.</p></div>
-      <div class="card pk2 in" style="--d:7"><div class="pkh"><b>Agente comercial</b></div><span class="num" style="font-size:68px"><span class="count">29</span><span class="u">€/mes</span></span><p>CRM, agenda, marketing, atención al cliente y portal del cliente.</p></div>
-      <div class="card pk2 in" style="--d:8"><div class="pkh"><b>Agente BIM y mediciones</b></div><span class="num" style="font-size:68px"><span class="count">59</span><span class="u">€/mes</span></span><p>BIM 3D, medición de planos y del 3D al presupuesto.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:38px">
+      <div class="card pk2 in" style="--d:3">
+        <div class="pkh"><b>Solo</b></div>
+        <span class="pkw">Autónomos</span>
+        <span class="num" style="font-size:66px"><span class="count">29</span><span class="u">€/mes</span></span>
+        <p>Presupuestador conversacional con tu libro de precios, plantillas, PDF y envío al cliente.</p>
+      </div>
+      <div class="card pk2 in" style="--d:4">
+        <div class="pkh"><b>Estudio</b></div>
+        <span class="pkw">Estudios y aparejadores</span>
+        <span class="num" style="font-size:66px"><span class="count">79</span><span class="u">€/mes</span></span>
+        <p><span class="inc">Todo lo de Solo, y además:</span> mediciones desde documento y planos, BC3 y Excel, ficha de obra y cliente.</p>
+      </div>
+      <div class="card pk2 in hi" style="--d:5">
+        <span class="pkt">La obra entera</span>
+        <div class="pkh"><b>Constructora</b></div>
+        <span class="pkw">Constructoras medianas</span>
+        <span class="num g" style="font-size:66px"><span class="count">199</span><span class="u">€/mes</span></span>
+        <p><span class="inc">Todo lo de Estudio, y además:</span> partes, pedidos, albaranes, almacén, subcontratas, certificaciones y coste real. Facturación con VeriFactu y control horario.</p>
+      </div>
+      <div class="card pk2 in" style="--d:6">
+        <div class="pkh"><b>Empresa</b></div>
+        <span class="pkw">Empresas grandes</span>
+        <span class="num" style="font-size:66px"><span class="count">499</span><span class="u">€/mes</span></span>
+        <p><span class="inc">Todo lo de Constructora, y además:</span> BIM 3D y del 3D al presupuesto, CRM y portal del cliente, planificador y tesorería.</p>
+      </div>
     </div>
-    <div class="seats in" style="--d:9;margin-top:auto"><span><b>19 €</b> plaza completa extra</span><span><b>6 €</b> plaza de campo</span><span><b>Gratis</b> solo lectura</span><span class="g"><b>−18 %</b> pago anual</span></div>
   </div>
   <div class="foot"><span class="iso" data-iso data-mono></span><span class="prog" style="--p:68.4%"><i></i></span><span>13</span></div>
 </section>
