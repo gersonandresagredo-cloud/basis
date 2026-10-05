@@ -166,7 +166,13 @@
       transform-origin: center center;
       flex-shrink: 0;
       background: #fff;
-      will-change: transform;
+    }
+    /* will-change hace que Safari rasterice el lienzo a su tamaño de diseño
+       (1920x1080) antes de escalarlo. En un monitor da igual, pero en un
+       movil la slide se muestra a ~390 px: se estaria pintando 25 veces mas
+       superficie de la necesaria, a triple densidad. Solo con raton. */
+    @media (hover: hover) {
+      .canvas { will-change: transform; }
     }
 
     /* Slides live in light DOM (via <slot>) so authored CSS still applies.

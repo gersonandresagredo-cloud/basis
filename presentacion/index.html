@@ -704,6 +704,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 <script src="present-keys.js"></script>
 <script src="video-preload.js"></script>
 <script src="touch-nav.js"></script>
+<script src="mobile-lite.js"></script>
 <script src="prestamistas-fx2.js"></script>
 <script>
 (()=>{try{document.querySelectorAll('[data-qr]').forEach(el=>{const q=qrcode(0,'H');q.addData(el.dataset.qr);q.make();el.innerHTML=q.createSvgTag({cellSize:8,margin:0,scalable:true});el.querySelectorAll('path,rect').forEach(e=>{if(e.getAttribute('fill')==='black'||e.getAttribute('fill')==='#000000')e.setAttribute('fill','#0A0A0A')});});}catch(e){}

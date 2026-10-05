@@ -13,6 +13,7 @@ presentacion/           La presentación, tal cual
   present-keys.js       Tecla F para pantalla completa
   video-preload.js      Trae cada vídeo cuando se acerca su slide
   touch-nav.js          Controles de paso y salida en pantallas táctiles
+  mobile-lite.js        Apaga el movimiento decorativo en táctil
   prestamistas-fx2.js   Partículas, isotipo, contadores y vídeos
   assets/               Vídeos, imagen del agente y la tipografía Inter
 ```
@@ -38,23 +39,34 @@ con letterbox y sin recortes.
 ## En el móvil
 
 La landing no mete la presentación en un iframe: la abre en su propia página.
-Un documento en vez de dos, que es la diferencia entre llegar al vídeo y que
-Safari se quede sin memoria por el camino y recargue (se ve como que la
-presentación "rebota" al inicio justo antes del vídeo).
+`touch-nav.js` pone dentro lo que hace falta sin ratón: barra con anterior /
+siguiente / salir, dos franjas de paso en los laterales y un aviso para girar
+el teléfono. Las franjas no son un adorno: la slide 12 lleva tarjetas
+clicables que se quedan con el toque antes de que la presentación lo reciba,
+así que tocando el centro no se pasaba de página.
 
-`touch-nav.js` pone dentro de la presentación lo que hace falta sin ratón:
-barra con anterior / siguiente / salir, dos franjas de paso en los laterales
-y un aviso para girar el teléfono. Nada de esto aparece con ratón, ni al
-proyectar, ni al imprimir.
+`mobile-lite.js` apaga el movimiento decorativo. La presentación está hecha
+para un proyector —47 animaciones en bucle, un campo de partículas a pantalla
+completa, degradados de 900 px, sombras difuminadas y máscaras— y cada uno de
+esos efectos le cuesta a Safari una capa de composición en memoria de GPU.
+Medido con Chromium emulando un iPhone: 81 capas, 42 MB de superficie y 80
+animaciones corriendo, de las cuales 85 pertenecían a slides que ni se veían,
+porque las 19 están a la vez en el árbol de render (el componente las oculta
+con opacity y visibility, no con display:none). Un iPhone no llega: mata la
+pestaña y recarga.
 
-Las franjas no son un adorno: la slide 12 lleva tarjetas clicables que se
-quedan con el toque antes de que la presentación lo reciba, así que tocando
-el centro no se pasaba de página. Por los lados se pasa siempre.
+Con el modo ligero quedan 26 MB y ninguna animación en marcha. Los textos,
+los colores, las imágenes, los vídeos y la estructura de cada slide no
+cambian; se va lo que se mueve de fondo. Las animaciones en bucle se congelan
+a mitad de ciclo en vez de cancelarse, para que lo que ellas encienden —los
+checks de las tarjetas, por ejemplo— se vea encendido.
 
-Tampoco se gira la presentación por CSS para que llene la pantalla en
-vertical: rotar un iframe con vídeo dentro saca a Safari del camino rápido de
-composición y le cuesta la pestaña. Por eso el aviso de girar el móvil, que
-es lo que sí funciona.
+Nada de esto se activa con ratón: al proyectar y en escritorio la
+presentación queda exactamente como estaba, partículas incluidas. El
+`will-change` del lienzo también se condiciona a que haya ratón: obliga a
+Safari a rasterizar a 1920×1080 antes de escalar, y en un móvil la slide se
+muestra a unos 390 px, así que se pintaría 25 veces más superficie de la
+necesaria a triple densidad.
 
 **Enlace directo a una slide:** `index.html#slide-13` abre la landing y entra
 en la slide 13. La presentación suelta también acepta `presentacion/#13`.
