@@ -31,7 +31,13 @@ function countUp(el){
 }
 
 const rnd=(a,b)=>a+Math.random()*(b-a);
-const P=[];for(let i=0;i<46;i++)P.push({x:rnd(0,W),y:rnd(0,H),vx:rnd(-.25,.25),vy:rnd(-.25,.25),r:rnd(.7,1.5)});
+// El campo cuesta O(n²) por fotograma al unir los puntos entre sí. En un
+// móvil se corta a la mitad de puntos (una cuarta parte del trabajo) y se
+// pinta uno de cada tres fotogramas en vez de uno de cada dos: se sigue
+// viendo moverse igual y el teléfono no se ahoga.
+const TOUCH=matchMedia('(hover:none)').matches;
+const NP=TOUCH?32:46, STEP=TOUCH?3:2;
+const P=[];for(let i=0;i<NP;i++)P.push({x:rnd(0,W),y:rnd(0,H),vx:rnd(-.25,.25),vy:rnd(-.25,.25),r:rnd(.7,1.5)});
 let B=[];const mouse={x:-999,y:-999};let active=null,mode='',dark=false;
 document.addEventListener('mousemove',e=>{if(!active)return;const r=active.getBoundingClientRect();
   const sx=(e.clientX-r.left)/r.width,sy=(e.clientY-r.top)/r.height;mouse.x=sx*W;mouse.y=sy*H;
@@ -48,12 +54,12 @@ function activate(s){
 }
 stage.addEventListener('slidechange',e=>{const s=e.detail.slide||secs[e.detail.index];if(s){try{activate(s);}catch(err){active=s;}}});
 
-const D2=80*80;let skip=false;
+const D2=80*80;let tick=0;
 function frame(){
-  skip=!skip;if(skip){requestAnimationFrame(frame);return;}
+  if(++tick%STEP){requestAnimationFrame(frame);return;}
   const s=stage.querySelector(':scope > section[data-deck-active]');
   if(s&&s!==active){try{activate(s);}catch(e){active=s;}}
-  if(active&&cv.isConnected){
+  if(active&&cv.isConnected&&cv.clientWidth){
     ctx.clearRect(0,0,W,H);
     const orbit=mode.includes('orbit'),flow=mode.includes('flow');
     const cx=(+(active.dataset.bx||960))/K,cy=(+(active.dataset.by||540))/K,R=(+(active.dataset.r||430))/K;

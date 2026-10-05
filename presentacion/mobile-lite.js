@@ -25,9 +25,12 @@
     /* Las 19 slides viven a la vez en el documento, ocultas solo con opacity
        y visibility: siguen costando capas y animaciones. Fuera del render. */
     deck-stage>section:not([data-deck-active]){display:none!important}
-    /* Partículas, foco que sigue al ratón y orbes: capas de 1920x1080 y
-       900x900 que solo son decoración. */
-    canvas.fx,.spot,.orb,.halo{display:none!important}
+    /* El foco verde que persigue al ratón: sin ratón no se mueve de sitio y
+       se lleva una capa de 800x800 con will-change. Fuera.
+       El campo de partículas y los degradados del fondo se quedan: son la
+       cara de la presentación. El campo se aligera en prestamistas-fx2.js y
+       los orbes son un radial-gradient estático, sin animación ni capa. */
+    .spot{display:none!important}
     /* drop-shadow y máscaras obligan a renderizar en un búfer aparte. */
     .aiav,.basi-av,.agent{filter:none!important}
     .mq,.ph3g{-webkit-mask-image:none!important;mask-image:none!important}

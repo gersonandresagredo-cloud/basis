@@ -50,21 +50,29 @@ el teléfono. Las franjas no son un adorno: la slide 12 lleva tarjetas
 clicables que se quedan con el toque antes de que la presentación lo reciba,
 así que tocando el centro no se pasaba de página.
 
-`mobile-lite.js` apaga el movimiento decorativo. La presentación está hecha
-para un proyector —47 animaciones en bucle, un campo de partículas a pantalla
-completa, degradados de 900 px, sombras difuminadas y máscaras— y cada uno de
-esos efectos le cuesta a Safari una capa de composición en memoria de GPU.
-Medido con Chromium emulando un iPhone: 81 capas, 42 MB de superficie y 80
-animaciones corriendo, de las cuales 85 pertenecían a slides que ni se veían,
-porque las 19 están a la vez en el árbol de render (el componente las oculta
-con opacity y visibility, no con display:none). Un iPhone no llega: mata la
-pestaña y recarga.
+`mobile-lite.js` recorta lo que a Safari le cuesta memoria de GPU. La
+presentación está hecha para un proyector —47 animaciones en bucle,
+degradados de 900 px, sombras difuminadas y máscaras— y cada efecto le cuesta
+una capa de composición. Medido con Chromium emulando un iPhone: 81 capas,
+42 MB de superficie y 80 animaciones corriendo, de las cuales 85 pertenecían a
+slides que ni se veían, porque las 19 están a la vez en el árbol de render (el
+componente las oculta con opacity y visibility, no con display:none). Un
+iPhone no llega: mata la pestaña y recarga.
 
-Con el modo ligero quedan 26 MB y ninguna animación en marcha. Los textos,
-los colores, las imágenes, los vídeos y la estructura de cada slide no
-cambian; se va lo que se mueve de fondo. Las animaciones en bucle se congelan
-a mitad de ciclo en vez de cancelarse, para que lo que ellas encienden —los
-checks de las tarjetas, por ejemplo— se vea encendido.
+El modo ligero deja fuera del render las slides que no se ven, congela a mitad
+de ciclo las animaciones en bucle —congelar y no cancelar, para que lo que
+ellas encienden siga encendido— y quita sombras, máscaras y el foco verde que
+persigue al ratón, que sin ratón no se mueve de sitio y se lleva una capa de
+800×800. Queda en 34 MB y ninguna animación en marcha.
+
+El campo de partículas del fondo **se queda**: es la cara de la presentación.
+Lo que se hace es aligerarlo en `prestamistas-fx2.js`, que une cada punto con
+los demás y por tanto cuesta O(n²) por fotograma: en táctil baja de 46 puntos
+a 32 (menos de la mitad de trabajo) y pinta uno de cada tres fotogramas en vez
+de uno de cada dos. Los degradados del fondo también se quedan: son un
+radial-gradient estático, sin animación ni capa propia. Tenerlos cuesta 8 MB
+sobre los 26 que costaría la versión sin nada de fondo, y siguen muy por
+debajo de los 42 que tumbaban el teléfono.
 
 Nada de esto se activa con ratón: al proyectar y en escritorio la
 presentación queda exactamente como estaba, partículas incluidas. El
