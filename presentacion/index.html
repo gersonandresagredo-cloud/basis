@@ -9,6 +9,74 @@
    aunque la sala no tenga internet. Variable font, pesos 100-900. */
 @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:block;
   src:url('assets/fonts/InterVariable.woff2') format('woff2');}
+
+/* ── Slide 11: el agente en el centro y sus cuatro agentes alrededor ──
+   Posiciones absolutas sobre un lienzo de 1640x620 para que los cables SVG
+   y las tarjetas compartan el mismo sistema de coordenadas. */
+.hb{position:relative;width:1640px;height:620px;margin-top:26px}
+.hbw{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hbw path{fill:none;stroke:rgba(42,157,91,.28);stroke-width:2}
+.hbw path.on{stroke:var(--green);stroke-width:2.6;stroke-dasharray:70 1400;animation:hbflow 1.5s linear infinite}
+@keyframes hbflow{to{stroke-dashoffset:-1470}}
+/* El pulso recorre el cable con un trazo discontinuo. Al imprimir no hay
+   animación y ese trazo dejaría el cable partido, así que ahí se pinta
+   entero. En el móvil sí corre: mobile-lite.js deja viva esta slide. */
+@media print{.hbw path.on{stroke-dasharray:none;animation:none}}
+
+/* Un punto de datos recorre el cable del agente activo hacia basis. El
+   .hb mide exactamente lo mismo que el viewBox del SVG, así que las
+   coordenadas del path valen tal cual para offset-path. */
+.hbp{position:absolute;left:0;top:0;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 16px var(--glt);opacity:0;z-index:4;pointer-events:none;
+  offset-rotate:0deg;offset-anchor:50% 50%}
+.hbp.on{animation:hbpk 1.9s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes hbpk{0%{offset-distance:0%;opacity:0}14%{opacity:1}86%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.hbp0{offset-path:path("M432,135 C548,135 586,178 668,152")}
+.hbp1{offset-path:path("M432,485 C548,485 586,442 668,448")}
+.hbp2{offset-path:path("M1208,135 C1092,135 1054,178 972,152")}
+.hbp3{offset-path:path("M1208,485 C1092,485 1054,442 972,448")}
+@media print{.hbp{display:none}}
+
+/* Los módulos del agente activo se encienden uno detrás de otro. */
+.hbag .ms span{transition-delay:0s}
+.hbag.on .ms span{transition-delay:calc(var(--k) * 70ms)}
+
+/* Cada vez que basis cambia de agente, suelta una onda. */
+.hbav .pulse{width:330px;height:330px;border:1px solid rgba(61,190,116,.5);opacity:0}
+.hbav .pulse.go{animation:hbwave 1.5s cubic-bezier(.16,1,.3,1)}
+@keyframes hbwave{from{opacity:.9;transform:translate(-50%,-50%) scale(.72)}
+                  to{opacity:0;transform:translate(-50%,-50%) scale(1.42)}}
+
+.hbav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:420px;height:420px;
+  display:flex;align-items:center;justify-content:center;z-index:2}
+.hbav img{height:330px;filter:drop-shadow(0 26px 46px rgba(10,40,25,.42));animation:hbfl 5s ease-in-out infinite;position:relative;z-index:2}
+@keyframes hbfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+.hbav i{position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hbav .g1{width:330px;height:330px;background:radial-gradient(circle,rgba(61,190,116,.22),transparent 66%)}
+.hbav .g2{width:360px;height:360px;border:1px dashed rgba(61,190,116,.3);animation:spin 42s linear infinite}
+.hbav .g3{width:430px;height:430px;border:1px solid rgba(42,157,91,.16)}
+.hbav b{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);z-index:3;
+  font-size:23px;font-weight:600;letter-spacing:-.02em;color:var(--ink);
+  background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 20px;white-space:nowrap}
+.hbav b span{color:var(--gt)}
+
+.hbag{position:absolute;width:432px;z-index:3;padding:26px 28px 24px;border-radius:24px;
+  border:1px solid var(--line);background:var(--card);box-shadow:var(--sh);
+  transform:translateY(-50%);
+  transition:border-color .45s,box-shadow .45s,transform .45s var(--ease)}
+.hbag.on{border-color:rgba(61,190,116,.6);transform:translateY(calc(-50% - 5px));
+  box-shadow:0 26px 58px -30px rgba(10,60,32,.5)}
+.hbag .t{display:flex;align-items:center;gap:12px}
+.hbag .t em{font-style:normal;width:9px;height:9px;border-radius:50%;background:rgba(42,157,91,.35);flex:none;transition:background .4s,box-shadow .4s}
+.hbag.on .t em{background:var(--green);box-shadow:0 0 14px var(--green)}
+.hbag b{font-size:27px;font-weight:600;letter-spacing:-.028em;line-height:1.1}
+.hbag .ms{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
+.hbag .ms span{font-size:17px;font-weight:500;letter-spacing:-.01em;color:var(--mut);
+  border:1px solid var(--line);border-radius:9px;padding:6px 12px;background:rgba(10,10,10,.015);
+  transition:color .4s,border-color .4s,background .4s}
+.hbag.on .ms span{color:var(--ink);border-color:rgba(61,190,116,.4);background:rgba(61,190,116,.09)}
+.hbn{display:flex;align-items:baseline;gap:14px}
+.hbn .lbl{font-size:23px;line-height:1.25;text-align:left}
 </style>
 <style>
 :root{--green:#3DBE74;--gdk:#2A9D5B;--glt:#6BE29A;--ease:cubic-bezier(.16,1,.3,1)}
@@ -530,7 +598,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
           <path class="aif" d="M430 230 H700"></path><path class="aif" style="animation-delay:0.8s" d="M940 230 C1080 230 1080 98 1210 98"></path><path class="aif" style="animation-delay:0.9500000000000001s" d="M940 230 C1080 230 1080 186 1210 186"></path><path class="aif" style="animation-delay:1.1s" d="M940 230 C1080 230 1080 274 1210 274"></path><path class="aif" style="animation-delay:1.25s" d="M940 230 C1080 230 1080 362 1210 362"></path>
         </svg>
         <div class="aiin"><div class="aih"><span class="rec"></span>Nota de voz · obra</div><div class="wave2"><i style="--wd:0.00s"></i><i style="--wd:0.06s"></i><i style="--wd:0.12s"></i><i style="--wd:0.18s"></i><i style="--wd:0.24s"></i><i style="--wd:0.30s"></i><i style="--wd:0.36s"></i><i style="--wd:0.42s"></i><i style="--wd:0.48s"></i><i style="--wd:0.54s"></i><i style="--wd:0.60s"></i><i style="--wd:0.66s"></i><i style="--wd:0.72s"></i><i style="--wd:0.78s"></i><i style="--wd:0.84s"></i><i style="--wd:0.90s"></i><i style="--wd:0.96s"></i><i style="--wd:1.02s"></i><i style="--wd:1.08s"></i><i style="--wd:1.14s"></i><i style="--wd:1.20s"></i><i style="--wd:1.26s"></i></div><p class="aitx" data-type="Hazme el presupuesto de la reforma del baño de la calle Mayor."></p></div>
-        <div class="aico"><canvas class="aicv" width="560" height="560"></canvas><img class="aiav" src="assets/basis-agente.png" alt="Basi"><div class="aicl"><b>basis <span>AI</span></b><span class="aist"></span></div></div>
+        <div class="aico"><canvas class="aicv" width="560" height="560"></canvas><img class="aiav" src="assets/basis-agente.png" alt="basis"><div class="aicl"><b>basis <span>AI</span></b><span class="aist"></span></div></div>
         <div class="aio" style="top:64px;--k:0"><span class="aiok"><i class="sp"></i><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></span><b class="aiot">Presupuestos</b><span class="aiob"><i></i></span></div><div class="aio" style="top:152px;--k:1"><span class="aiok"><i class="sp"></i><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></span><b class="aiot">Mediciones</b><span class="aiob"><i></i></span></div><div class="aio" style="top:240px;--k:2"><span class="aiok"><i class="sp"></i><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></span><b class="aiot">Partidas</b><span class="aiob"><i></i></span></div><div class="aio" style="top:328px;--k:3"><span class="aiok"><i class="sp"></i><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></span><b class="aiot">Avisos</b><span class="aiob"><i></i></span></div>
         <span class="aipk" style="offset-path:path('M430 230 H700');animation-delay:0s"></span><span class="aipk" style="offset-path:path('M940 230 C1080 230 1080 98 1210 98');animation-delay:0.9500000000000001s"></span><span class="aipk" style="offset-path:path('M940 230 C1080 230 1080 186 1210 186');animation-delay:1.1s"></span><span class="aipk" style="offset-path:path('M940 230 C1080 230 1080 274 1210 274');animation-delay:1.25s"></span><span class="aipk" style="offset-path:path('M940 230 C1080 230 1080 362 1210 362');animation-delay:1.4s"></span>
       </div>
@@ -590,22 +658,40 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 
 <section data-label="Lo que tenemos">
   <div class="orb" style="width:900px;height:900px;left:-300px;bottom:-400px"></div>
-  <div class="pad">
-    <span class="eb in" style="--d:0">Lo que tenemos · en producción</span>
-    <h2 class="rv" style="--d:1;margin-top:24px">Lo que <span class="g">ya funciona.</span></h2>
-    <div style="display:grid;grid-template-columns:420px minmax(0,1fr);gap:70px;align-items:center;margin-top:auto">
-      <div class="in" style="--d:2;display:flex;flex-direction:column;align-items:center;gap:26px">
-        <div class="ring" style="width:340px;height:340px"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="6"></circle><circle class="fg" cx="60" cy="60" r="52" fill="none" stroke-width="6" style="--c:326.7;stroke-dasharray:326.7;stroke-dashoffset:192.8"></circle></svg><div class="od"></div><div class="rl"><span class="num g" style="font-size:110px"><span class="count">29</span></span><span style="font-size:24px;color:var(--mut)">de 70 módulos</span></div></div>
-        <span class="lbl" style="text-align:center">en producción hoy</span>
+  <div class="pad" style="padding-top:78px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px">
+      <div><span class="eb in" style="--d:0">Lo que tenemos · en producción</span><h2 class="rv" style="--d:1;margin-top:18px">Lo que <span class="g">ya funciona.</span></h2></div>
+      <div class="hbn in" style="--d:2"><span class="num g" style="font-size:86px"><span class="count">29</span></span><span class="lbl">de 70 módulos<br>en producción hoy</span></div>
+    </div>
+    <div class="hb">
+      <svg class="hbw" viewBox="0 0 1640 620" preserveAspectRatio="none" aria-hidden="true">
+        <path data-w="0" d="M432,135 C548,135 586,178 668,152"></path>
+        <path data-w="1" d="M432,485 C548,485 586,442 668,448"></path>
+        <path data-w="2" d="M1208,135 C1092,135 1054,178 972,152"></path>
+        <path data-w="3" d="M1208,485 C1092,485 1054,442 972,448"></path>
+      </svg>
+      <span class="hbp hbp0"></span><span class="hbp hbp1"></span><span class="hbp hbp2"></span><span class="hbp hbp3"></span>
+      <div class="hbav pop" style="--d:3">
+        <i class="g3"></i><i class="g2"></i><i class="g1"></i><i class="pulse"></i>
+        <img src="assets/basis-agente.png" alt="basis, el agente de obra">
+        <b><span>basis</span>, el agente de obra</b>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px">
-        <div class="card hv in" style="--d:3"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div><div><b>Basi, el agente</b><p>Conversa y usa las herramientas de 5 packs.</p></div></div>
-        <div class="card hv in" style="--d:4"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div><div><b>Presupuestos</b><p>Libro de precios, editor, PDF y modo revisión.</p></div></div>
-        <div class="card hv in" style="--d:5"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div><div><b>Obras y clientes</b><p>Ficha de obra, cliente, envío y aceptación.</p></div></div>
-        <div class="card hv in" style="--d:6"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div><div><b>Coste real de obra</b><p>Partes, pedidos, albaranes, almacén y certificaciones.</p></div></div>
-        <div class="card hv in" style="--d:7"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div><div><b>Comercial</b><p>CRM, agenda, marketing y SEO.</p></div></div>
-        <div class="card hv in" style="--d:8"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div><div><b>Gastos</b><p>Facturas recibidas y proveedores.</p></div></div>
-      </div>
+      <article class="hbag in" data-ag="0" style="--d:4;left:0;top:135px">
+        <span class="t"><em></em><b>Agente de presupuestos</b></span>
+        <div class="ms"><span style="--k:0">Libro de precios</span><span style="--k:1">Editor</span><span style="--k:2">PDF</span><span style="--k:3">Modo revisión</span></div>
+      </article>
+      <article class="hbag in" data-ag="1" style="--d:5;left:0;top:485px">
+        <span class="t"><em></em><b>Agente de obras y clientes</b></span>
+        <div class="ms"><span style="--k:0">Ficha de obra</span><span style="--k:1">Cliente</span><span style="--k:2">Envío</span><span style="--k:3">Aceptación</span></div>
+      </article>
+      <article class="hbag in" data-ag="2" style="--d:6;right:0;top:135px">
+        <span class="t"><em></em><b>Agente comercial</b></span>
+        <div class="ms"><span style="--k:0">CRM</span><span style="--k:1">Agenda</span><span style="--k:2">Marketing</span><span style="--k:3">SEO</span></div>
+      </article>
+      <article class="hbag in" data-ag="3" style="--d:7;right:0;top:485px">
+        <span class="t"><em></em><b>Agente de costes</b></span>
+        <div class="ms"><span style="--k:0">Partes</span><span style="--k:1">Pedidos</span><span style="--k:2">Albaranes</span><span style="--k:3">Almacén</span><span style="--k:4">Certificaciones</span><span style="--k:5">Facturas</span></div>
+      </article>
     </div>
   </div>
   <div class="foot"><span class="iso" data-iso data-mono></span><span class="prog" style="--p:57.9%"><i></i></span><span>11</span></div>
@@ -822,6 +908,26 @@ document.querySelectorAll('.swcv').forEach(cv=>{const x=cv.getContext('2d'),W=cv
   const cg=x.createRadialGradient(C,C,0,C,C,320);cg.addColorStop(0,'rgba(61,190,116,.16)');cg.addColorStop(1,'rgba(61,190,116,0)');x.fillStyle=cg;x.fillRect(0,0,W,W);
   x.globalCompositeOperation='source-over';raf=requestAnimationFrame(f);}
  const go=()=>{cancelAnimationFrame(raf);if(sec.hasAttribute('data-deck-active')){t0=0;raf=requestAnimationFrame(f);}};
+ new MutationObserver(go).observe(sec,{attributes:true,attributeFilter:['data-deck-active']});go();});
+/* Slide 11: los cuatro agentes se encienden por turnos, con su cable.
+   El ciclo solo corre con la slide delante; al salir se para y se limpia. */
+document.querySelectorAll('.hb').forEach(hb=>{
+ const sec=hb.closest('section'), ags=[...hb.querySelectorAll('.hbag')], ws=[...hb.querySelectorAll('.hbw path')];
+ const pks=[...hb.querySelectorAll('.hbp')], wave=hb.querySelector('.pulse');
+ let i=0, iv;
+ const paint=()=>{
+   ags.forEach((a,n)=>a.classList.toggle('on',n===i));
+   ws.forEach((w,n)=>w.classList.toggle('on',n===i));
+   pks.forEach((k,n)=>k.classList.toggle('on',n===i));
+   // Reiniciar la onda a mano: volver a poner la clase no relanza la animación.
+   if(wave){wave.classList.remove('go');void wave.offsetWidth;wave.classList.add('go');}
+   i=(i+1)%ags.length;};
+ const clr=()=>{clearInterval(iv);iv=0;ags.forEach(a=>a.classList.remove('on'));
+   ws.forEach(w=>w.classList.remove('on'));pks.forEach(k=>k.classList.remove('on'));
+   if(wave)wave.classList.remove('go');};
+ const go=()=>{clr();if(sec.hasAttribute('data-deck-active')){i=0;paint();iv=setInterval(paint,2300);}};
+ // Pulsar un agente lo fija: al presentar interesa poder pararse en uno.
+ ags.forEach((a,n)=>a.addEventListener('click',e=>{e.stopPropagation();clearInterval(iv);iv=0;i=n;paint();}));
  new MutationObserver(go).observe(sec,{attributes:true,attributeFilter:['data-deck-active']});go();});
 window.__stT=tw=>{if(tw._end)return;const T=+tw.dataset.timer;tw._end=Date.now()+T*1000;const f=()=>{const left=Math.max(0,Math.ceil((tw._end-Date.now())/1000));tw.querySelector('.tm').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');tw.style.setProperty('--tp',left/T);if(!left)clearInterval(tw._iv);};f();tw._iv=setInterval(f,250);tw.addEventListener('dblclick',()=>{tw._end=Date.now()+T*1000;clearInterval(tw._iv);f();tw._iv=setInterval(f,250);});};
 document.querySelectorAll('[data-timer]').forEach(tw=>{const sec=tw.closest('section');const chk=()=>{if(sec.hasAttribute('data-deck-active'))window.__stT(tw);};new MutationObserver(chk).observe(sec,{attributes:true,attributeFilter:['data-deck-active']});chk();setTimeout(chk,800);});

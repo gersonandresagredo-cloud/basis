@@ -97,6 +97,24 @@ cero con doble clic y sobrevive a una recarga de la página.
 No confundir con el temporizador de 10 minutos de la slide 14, que es parte de
 la presentación y cuenta hacia atrás para el turno de preguntas.
 
+## La slide 11
+
+El esquema de agentes: **basis** en el centro y sus cuatro agentes alrededor
+—presupuestos, obras y clientes, comercial y costes— con sus módulos. Los
+cuatro se encienden por turnos cada 2,3 segundos: se ilumina la tarjeta, sus
+módulos se encienden en cascada, el cable se pone verde, un punto de datos lo
+recorre hacia basis y basis suelta una onda. Pulsar un agente fija ese y para
+la rotación, que al presentar interesa poder quedarse en uno.
+
+Las tarjetas se anclan por su centro al eje del que sale cada cable, así que
+da igual que unas tengan más módulos que otras: los cables siempre encajan.
+El ciclo solo corre con la slide delante.
+
+Esta slide es la única que `mobile-lite.js` deja animada en el móvil: aquí el
+movimiento es el contenido, no el decorado, y son cinco animaciones en una
+sola slide. Al imprimir, el cable activo se pinta entero —el trazo
+discontinuo del pulso lo dejaría partido— y los puntos de datos no salen.
+
 **Enlace directo a una slide:** `index.html#slide-13` abre la landing y entra
 en la slide 13. La presentación suelta también acepta `presentacion/#13`.
 

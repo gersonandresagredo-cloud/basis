@@ -44,8 +44,16 @@
   // de cancelarse: cancelar devuelve el elemento a su estado de partida y
   // varias arrancan desde apagado (los checks de las tarjetas se quedarían
   // vacíos). Pausadas a mitad se ven encendidas y no cuestan ni un frame.
+  // El esquema de agentes de la slide 11 se libra: ahí el movimiento es el
+  // contenido, no el decorado. Es una sola slide y son cuatro animaciones.
+  const vivo = a => {
+    const t = a.effect && a.effect.target;
+    return !!(t && t.closest && t.closest('.hb'));
+  };
+
   const stop = () => {
     for (const a of document.getAnimations()) {
+      if (vivo(a)) continue;
       const t = a.effect && a.effect.getTiming && a.effect.getTiming();
       if (!t || t.iterations !== Infinity || a.playState === 'paused') continue;
       try {
