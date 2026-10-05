@@ -12,6 +12,7 @@ presentacion/           La presentación, tal cual
   image-slot.js
   present-keys.js       Tecla F para pantalla completa
   video-preload.js      Trae cada vídeo cuando se acerca su slide
+  touch-nav.js          Controles de paso y salida en pantallas táctiles
   prestamistas-fx2.js   Partículas, isotipo, contadores y vídeos
   assets/               Vídeos, imagen del agente y la tipografía Inter
 ```
@@ -36,16 +37,24 @@ con letterbox y sin recortes.
 
 ## En el móvil
 
-El visor detecta la pantalla táctil y cambia tres cosas: gira la presentación
-90° cuando el teléfono está en vertical, para que la slide llene la pantalla
-en lugar de quedarse en una franja; deja la barra de control siempre a la
-vista, porque sin ratón no hay forma de hacer volver una barra escondida; y
-añade dos franjas de paso en los laterales.
+La landing no mete la presentación en un iframe: la abre en su propia página.
+Un documento en vez de dos, que es la diferencia entre llegar al vídeo y que
+Safari se quede sin memoria por el camino y recargue (se ve como que la
+presentación "rebota" al inicio justo antes del vídeo).
 
-Esas franjas no son un adorno: la slide 12 lleva tarjetas clicables que se
+`touch-nav.js` pone dentro de la presentación lo que hace falta sin ratón:
+barra con anterior / siguiente / salir, dos franjas de paso en los laterales
+y un aviso para girar el teléfono. Nada de esto aparece con ratón, ni al
+proyectar, ni al imprimir.
+
+Las franjas no son un adorno: la slide 12 lleva tarjetas clicables que se
 quedan con el toque antes de que la presentación lo reciba, así que tocando
-el centro no se pasaba de página. Por los lados se pasa siempre, en cualquier
-slide. Al poner el teléfono en horizontal, la rotación se quita sola.
+el centro no se pasaba de página. Por los lados se pasa siempre.
+
+Tampoco se gira la presentación por CSS para que llene la pantalla en
+vertical: rotar un iframe con vídeo dentro saca a Safari del camino rápido de
+composición y le cuesta la pestaña. Por eso el aviso de girar el móvil, que
+es lo que sí funciona.
 
 **Enlace directo a una slide:** `index.html#slide-13` abre la landing y entra
 en la slide 13. La presentación suelta también acepta `presentacion/#13`.
