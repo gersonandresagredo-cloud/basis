@@ -531,6 +531,26 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 .swcv{position:absolute;inset:0;width:100%;height:100%}
 .swk{font-size:22px;font-weight:600;color:#6BE29A;padding:6px 16px;border-radius:10px;background:rgba(61,190,116,.12);border:1px solid rgba(61,190,116,.35);margin-bottom:8px}
 .swc .tm{text-shadow:0 0 40px rgba(61,190,116,.5)}
+/* Mando de la cuenta atrás: arranca cuando se pulsa, no al llegar a la
+   slide. En una reunión el turno de preguntas empieza cuando empieza. */
+.swctl{display:flex;align-items:center;gap:12px;margin-top:22px;z-index:4}
+/* El reloj posiciona sus propios SVG a pantalla completa y girados (.sw svg);
+   los iconos de estos botones tienen que quedar fuera de eso. */
+.swctl svg{position:static;inset:auto;transform:none}
+.swctl button{border:0;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .25s,transform .2s var(--ease),color .25s,border-color .25s}
+.swctl button:active{transform:scale(.96)}
+.swgo{height:62px;padding:0 34px;border-radius:16px;background:var(--green);color:#06120B;
+  font-size:26px;font-weight:600;letter-spacing:-.02em;gap:11px;
+  box-shadow:0 18px 40px -18px rgba(61,190,116,.9)}
+.swgo:hover{background:var(--glt)}
+.swgo svg{width:21px;height:21px;fill:currentColor}
+.swrs{width:62px;height:62px;border-radius:16px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.16)!important;color:#D9DEDB}
+.swrs:hover{background:rgba(61,190,116,.18);color:#fff}
+.swrs svg{width:22px;height:22px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sw:not(.tocado) .swrs{display:none}
+.sw.fin .tm{color:var(--glt)}
 .gshine{background:linear-gradient(100deg,#2A9D5B 0%,#3DBE74 35%,#d8ffe8 50%,#3DBE74 65%,#2A9D5B 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gsh 4s ease-in-out infinite}
 @keyframes gsh{0%{background-position:100% 0}100%{background-position:-150% 0}}
 .g7{display:flex;align-items:center;gap:36px;margin-top:10px}
@@ -765,7 +785,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
       </div>
       <div class="sw in" data-timer="600" style="--d:3">
         <canvas class="swcv" width="1140" height="1140"></canvas>
-        <div class="swc"><span class="swk">basis AI · cuenta atrás</span><span class="tm">10:00</span><span class="lbl">minutos para dudas</span></div>
+        <div class="swc"><span class="swk">basis AI · cuenta atrás</span><span class="tm">10:00</span><span class="lbl">minutos para dudas</span><div class="swctl"><button class="swgo" type="button"></button><button class="swrs" type="button" title="Volver a 10:00" aria-label="Volver a 10:00"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg></button></div></div>
       </div>
     </div>
   </div>
@@ -843,7 +863,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 const st=document.querySelector('deck-stage');let t,tmi;
 st.addEventListener('slidechange',e=>{clearTimeout(t);const s=e.detail.slide;if(!s)return;const i=e.detail.index;
   const v=s.querySelector('video');if(v)v.onended=null;
- const tw=s.querySelector('[data-timer]');if(tw)window.__stT(tw);if(false){const T=+tw.dataset.timer;tw._end=Date.now()+T*1000;const f=()=>{const left=Math.max(0,Math.ceil((tw._end-Date.now())/1000));tw.querySelector('.tm').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');tw.style.setProperty('--tp',left/T);if(!left)clearInterval(tw._iv);};f();tw._iv=setInterval(f,250);tw.addEventListener('dblclick',()=>{tw._end=Date.now()+T*1000;clearInterval(tw._iv);f();tw._iv=setInterval(f,250);});}});
+ if(false){const T=+tw.dataset.timer;tw._end=Date.now()+T*1000;const f=()=>{const left=Math.max(0,Math.ceil((tw._end-Date.now())/1000));tw.querySelector('.tm').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');tw.style.setProperty('--tp',left/T);if(!left)clearInterval(tw._iv);};f();tw._iv=setInterval(f,250);tw.addEventListener('dblclick',()=>{tw._end=Date.now()+T*1000;clearInterval(tw._iv);f();tw._iv=setInterval(f,250);});}});
 })();
 document.querySelectorAll('.rm').forEach(rm=>{const cs=[...rm.querySelectorAll('.ph3')];let k=0,auto=true,iv;
  const set=i=>{k=i;cs.forEach((c,j)=>c.classList.toggle('on',j===i));rm.style.setProperty('--rf',(i/(cs.length-1)*100)+'%');};
@@ -929,8 +949,41 @@ document.querySelectorAll('.hb').forEach(hb=>{
  // Pulsar un agente lo fija: al presentar interesa poder pararse en uno.
  ags.forEach((a,n)=>a.addEventListener('click',e=>{e.stopPropagation();clearInterval(iv);iv=0;i=n;paint();}));
  new MutationObserver(go).observe(sec,{attributes:true,attributeFilter:['data-deck-active']});go();});
-window.__stT=tw=>{if(tw._end)return;const T=+tw.dataset.timer;tw._end=Date.now()+T*1000;const f=()=>{const left=Math.max(0,Math.ceil((tw._end-Date.now())/1000));tw.querySelector('.tm').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');tw.style.setProperty('--tp',left/T);if(!left)clearInterval(tw._iv);};f();tw._iv=setInterval(f,250);tw.addEventListener('dblclick',()=>{tw._end=Date.now()+T*1000;clearInterval(tw._iv);f();tw._iv=setInterval(f,250);});};
-document.querySelectorAll('[data-timer]').forEach(tw=>{const sec=tw.closest('section');const chk=()=>{if(sec.hasAttribute('data-deck-active'))window.__stT(tw);};new MutationObserver(chk).observe(sec,{attributes:true,attributeFilter:['data-deck-active']});chk();setTimeout(chk,800);});
+/* Cuenta atrás del turno de preguntas. Arranca con su botón, se pausa y se
+   reanuda, y vuelve a 10:00 cuando se pide. El tiempo se lleva con una marca
+   de fin y no contando ticks, así que no se desfasa aunque el intervalo se
+   pare al salir de la slide. */
+document.querySelectorAll('[data-timer]').forEach(sw=>{
+  const T=+sw.dataset.timer, tm=sw.querySelector('.tm');
+  const go=sw.querySelector('.swgo'), rs=sw.querySelector('.swrs');
+  if(!tm||!go) return;
+  const PLAY='<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8V4z"/></svg>';
+  const PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+  // 'activo' es si la cuenta está en marcha; 'iv', si además se está
+  // repintando. Salir de la slide para resolver una duda solo para el
+  // repintado: el turno de preguntas sigue corriendo igual.
+  let left=T, fin=0, iv=0, activo=false;
+  const mmss=v=>Math.floor(v/60)+':'+String(Math.floor(v%60)).padStart(2,'0');
+  const pinta=()=>{tm.textContent=mmss(Math.ceil(left));sw.style.setProperty('--tp',left/T);
+    sw.classList.toggle('fin',left<=0);sw.classList.toggle('tocado',left<T);};
+  const para=()=>{clearInterval(iv);iv=0;};
+  const tic=()=>{left=Math.max(0,(fin-Date.now())/1000);pinta();
+    if(left<=0){activo=false;para();go.innerHTML=PLAY+'Reiniciar';}};
+  const pinta_iv=()=>{para();iv=setInterval(tic,200);tic();};
+  const corre=()=>{if(!activo){fin=Date.now()+left*1000;activo=true;}pinta_iv();go.innerHTML=PAUSE+'Pausar';};
+  const pausa=()=>{activo=false;para();go.innerHTML=PLAY+'Reanudar';};
+  const cero =()=>{activo=false;para();left=T;pinta();go.innerHTML=PLAY+'Iniciar';};
+  go.addEventListener('click',e=>{e.stopPropagation();
+    if(left<=0){cero();return;} iv?pausa():corre();});
+  if(rs) rs.addEventListener('click',e=>{e.stopPropagation();cero();});
+  // Fuera de la slide no hace falta repintar; al volver se recalcula del reloj.
+  const sec=sw.closest('section');
+  new MutationObserver(()=>{
+    if(sec.hasAttribute('data-deck-active')){ if(activo&&!iv) pinta_iv(); }
+    else para();
+  }).observe(sec,{attributes:true,attributeFilter:['data-deck-active']});
+  cero();
+});
 </script>
 </body>
 </html>

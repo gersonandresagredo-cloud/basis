@@ -94,8 +94,20 @@ en la slide actual. Empieza escondido a propósito: el público ve la misma
 pantalla. Arranca al pasar de la primera slide, se pausa con un clic, se pone a
 cero con doble clic y sobrevive a una recarga de la página.
 
-No confundir con el temporizador de 10 minutos de la slide 14, que es parte de
-la presentación y cuenta hacia atrás para el turno de preguntas.
+## La cuenta atrás de la slide 14
+
+Los 10 minutos del turno de preguntas no arrancan solos al llegar a la slide:
+el turno empieza cuando empieza. Debajo del reloj hay un botón que inicia,
+pausa y reanuda, y otro al lado que vuelve a 10:00 —este solo aparece cuando
+la cuenta ya se ha tocado.
+
+El tiempo se lleva con una marca de fin y no contando ticks, así que si sales
+a otra slide para resolver una duda la cuenta sigue corriendo y al volver
+muestra el tiempo real. Lo que se para al salir es el repintado, no el reloj.
+En pausa sí se queda quieta, se salga o no de la slide.
+
+No confundirla con el cronómetro del presentador (tecla `T`), que cuenta hacia
+arriba lo que llevas de presentación.
 
 ## La slide 11
 
