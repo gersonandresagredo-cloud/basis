@@ -14,6 +14,7 @@ presentacion/           La presentación, tal cual
   video-preload.js      Trae cada vídeo cuando se acerca su slide
   touch-nav.js          Controles de paso y salida en pantallas táctiles
   mobile-lite.js        Apaga el movimiento decorativo en táctil
+  presenter-controls.js Mando del presentador: barra de vídeo y cronómetro
   prestamistas-fx2.js   Partículas, isotipo, contadores y vídeos
   assets/               Vídeos, imagen del agente y la tipografía Inter
 ```
@@ -32,6 +33,10 @@ completa, sin miniaturas ni barras: solo la slide. Cualquier tarjeta del
 | `F` | Pantalla completa |
 | `R` | Volver a la portada |
 | `Esc` | Salir de la proyección |
+| `P` o `K` | Pausar o reanudar el vídeo de la slide |
+| `J` / `L` | Retroceder o adelantar 10 segundos |
+| `M` | Silenciar el vídeo |
+| `T` | Cronómetro de la presentación |
 
 La presentación es 1920×1080 y se escala sola a la pantalla que tenga la sala,
 con letterbox y sin recortes.
@@ -67,6 +72,22 @@ presentación queda exactamente como estaba, partículas incluidas. El
 Safari a rasterizar a 1920×1080 antes de escalar, y en un móvil la slide se
 muestra a unos 390 px, así que se pintaría 25 veces más superficie de la
 necesaria a triple densidad.
+
+## Mando del presentador
+
+Las slides con vídeo sacan su propia barra: pausar, saltar 10 segundos atrás o
+adelante, moverte por la grabación arrastrando y silenciar. Pulsar sobre el
+vídeo también lo para y lo reanuda. Con ratón la barra se esconde sola a los
+pocos segundos de quietud y vuelve al mover el ratón; con el dedo se queda
+fija, porque sin ratón no hay forma de hacerla volver.
+
+El cronómetro (tecla `T`) cuenta lo que llevas de presentación y lo que llevas
+en la slide actual. Empieza escondido a propósito: el público ve la misma
+pantalla. Arranca al pasar de la primera slide, se pausa con un clic, se pone a
+cero con doble clic y sobrevive a una recarga de la página.
+
+No confundir con el temporizador de 10 minutos de la slide 14, que es parte de
+la presentación y cuenta hacia atrás para el turno de preguntas.
 
 **Enlace directo a una slide:** `index.html#slide-13` abre la landing y entra
 en la slide 13. La presentación suelta también acepta `presentacion/#13`.
