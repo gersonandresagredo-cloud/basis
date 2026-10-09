@@ -23,7 +23,11 @@
   const total = stage.children.length;
   const css = `
     .tn{position:fixed;z-index:2147483000;font-family:'Inter',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
-    .tn-z{top:0;bottom:0;width:16%;background:none;border:0;padding:0}
+    /* La banda de arriba se deja libre: ahí viven los controles de la slide
+       (el selector mensual/anual de la 13), y una franja de paso por encima
+       se quedaría con el toque. Las tarjetas clicables de la 12 están a
+       media altura, así que siguen cubiertas. */
+    .tn-z{top:19%;bottom:0;width:16%;background:none;border:0;padding:0}
     .tn-z.l{left:0}.tn-z.r{right:0}
     .tn-bar{left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);
       display:flex;align-items:center;gap:4px;padding:6px;border-radius:15px;

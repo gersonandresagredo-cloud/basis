@@ -50,6 +50,12 @@ el teléfono. Las franjas no son un adorno: la slide 12 lleva tarjetas
 clicables que se quedan con el toque antes de que la presentación lo reciba,
 así que tocando el centro no se pasaba de página.
 
+Las franjas arrancan a un 19 % de altura y dejan libre la banda de arriba: ahí
+es donde viven los controles de una slide —el selector mensual / anual de la
+13— y una franja de paso por encima se quedaría con el toque. Lo que queda
+descubierto no pierde nada: ahí sigue funcionando el toque de paso que trae la
+propia presentación, que ya respeta los botones de la slide.
+
 `mobile-lite.js` recorta lo que a Safari le cuesta memoria de GPU. La
 presentación está hecha para un proyector —47 animaciones en bucle,
 degradados de 900 px, sombras difuminadas y máscaras— y cada efecto le cuesta
@@ -108,6 +114,20 @@ En pausa sí se queda quieta, se salga o no de la slide.
 
 No confundirla con el cronómetro del presentador (tecla `T`), que cuenta hacia
 arriba lo que llevas de presentación.
+
+## La slide 13
+
+Los cuatro planes con un selector de mensual o anual. Cada precio lleva sus
+dos valores escritos en el HTML —`data-m` y `data-y`—, así que el botón no
+calcula nada: el anual es el que cobran, no el mensual multiplicado por doce
+menos un 18 %, que daría otro número.
+
+Al cambiar de valor hay que mover también el `data-final` del contador, porque
+`prestamistas-fx2.js` cuenta hasta ese número al entrar en la slide y si no se
+toca contaría hasta el precio anterior. Y al volver a la slide se reinicia a
+mensual escuchando en fase de captura sobre `document`, que va por delante del
+listener de `prestamistas-fx2.js` sobre `<deck-stage>`: así el contador
+arranca ya con el precio bueno en lugar de corregirlo a medio camino.
 
 ## La slide 11
 

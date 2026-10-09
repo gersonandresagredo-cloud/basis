@@ -15,8 +15,11 @@ sin internet la presentación no debe cambiar de letra a mitad de reunión.
 ## Cifras
 
 Nunca inventar precios, cifras de clientes ni testimonios. Los planes son
-Solo 29 € · Estudio 79 € · Constructora 199 € · Empresa 499 €, y los módulos
-en producción, 29 de 70. Si hace falta un dato que no está, se pregunta.
+Solo 49 € · Estudio 129 € · Constructora 249 € · Enterprise a medida, al mes y
+con IVA aparte; el pago anual los deja en 40 · 106 · 204, un 18 % menos. Los
+módulos en producción, 29 de 70. Si hace falta un dato que no está, se
+pregunta: tampoco se deduce. El total anual, por ejemplo, no es el mensual por
+doce, y ponerlo calculado sería inventarlo.
 
 ## La presentación
 
