@@ -122,12 +122,22 @@ dos valores escritos en el HTML —`data-m` y `data-y`—, así que el botón no
 calcula nada: el anual es el que cobran, no el mensual multiplicado por doce
 menos un 18 %, que daría otro número.
 
+El cambio no es un salto: la píldora del selector se desliza al otro botón,
+cada precio cuenta del viejo al nuevo —de 49 a 40, no desde cero— y las cuatro
+tarjetas lo hacen en cascada, 70 ms de diferencia entre una y la siguiente.
+
 Al cambiar de valor hay que mover también el `data-final` del contador, porque
 `prestamistas-fx2.js` cuenta hasta ese número al entrar en la slide y si no se
 toca contaría hasta el precio anterior. Y al volver a la slide se reinicia a
 mensual escuchando en fase de captura sobre `document`, que va por delante del
 listener de `prestamistas-fx2.js` sobre `<deck-stage>`: así el contador
 arranca ya con el precio bueno en lugar de corregirlo a medio camino.
+
+La clase del salto se llama `pxw` y no `sw` porque `.sw` ya es el reloj de la
+cuenta atrás, que mide 760×760: puesta en un precio, estiraba la tarjeta
+entera y se llevaba por delante la lista. Es la segunda vez que pasa con ese
+nombre —antes fue `.swb`—, así que conviene mirar antes de inventarse una
+clase de dos o tres letras.
 
 ## La slide 11
 

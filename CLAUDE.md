@@ -30,3 +30,7 @@ la impresión a PDF, que debe seguir saliendo en 19 páginas.
 
 Al proyectar manda el escritorio: nada de lo que se añada para el móvil puede
 cambiar cómo se ve en una pantalla grande.
+
+Todo el deck comparte una hoja de estilos y las clases son de dos o tres
+letras, así que antes de inventarse una hay que buscarla: `.sw` ya ha chocado
+dos veces y no avisa, solo deforma la slide.

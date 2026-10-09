@@ -374,12 +374,18 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 
 /* Selector mensual / anual. Vive en la slide, así que el clic corta la
    propagación: en táctil un toque en la slide pasa de página. */
-.bt{display:inline-flex;align-items:center;gap:4px;padding:5px;border-radius:999px;
+.bt{position:relative;display:inline-flex;align-items:center;gap:4px;padding:5px;border-radius:999px;
   border:1px solid var(--line);background:rgba(10,10,10,.04)}
-.bt button{border:0;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:8px;
+/* La píldora se mide del botón encendido y se desliza hasta él. Cambiar el
+   fondo del botón sería un fundido; esto se ve moverse, que es lo que dice
+   que son dos caras de lo mismo y no dos botones sueltos. */
+.btp{position:absolute;top:5px;left:5px;height:46px;border-radius:999px;background:var(--card);
+  box-shadow:0 2px 6px rgba(10,24,16,.1);pointer-events:none;
+  transition:transform .42s cubic-bezier(.34,1.26,.5,1),width .42s cubic-bezier(.34,1.26,.5,1)}
+.bt button{position:relative;z-index:1;border:0;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:8px;
   height:46px;padding:0 22px;border-radius:999px;background:none;color:var(--mut);
-  font-size:21px;font-weight:600;letter-spacing:-.02em;transition:background .25s,color .25s,box-shadow .25s}
-.bt button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 6px rgba(10,24,16,.1)}
+  font-size:21px;font-weight:600;letter-spacing:-.02em;transition:color .25s}
+.bt button.on{color:var(--ink)}
 .bt button i{font-style:normal;font-size:17px;font-weight:700;color:var(--gt)}
 .bt button.on i{color:var(--gt)}
 .btn-note{display:block;margin-top:10px;font-size:15px;color:var(--mut);text-align:right}
@@ -389,6 +395,12 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
 .plan .cred{margin-top:9px;font-size:15px;font-weight:400;color:var(--dim,#8A918C);line-height:1.3;
   font-variant-numeric:tabular-nums}
 .plan .price em.custom{font-size:52px;line-height:1.46;letter-spacing:-.04em}
+/* El precio no cambia de golpe: cuenta de uno a otro y da un salto corto,
+   y las cuatro tarjetas lo hacen en cascada. */
+@keyframes ppr{0%{transform:translateY(0)}34%{transform:translateY(-7px)}100%{transform:translateY(0)}}
+.plan .price em.pxw{animation:ppr .46s cubic-bezier(.3,1.25,.5,1)}
+@keyframes ppe{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.plan .per.pxw{animation:ppe .4s ease}
 .plan li.no{color:var(--mut)}
 .plan li.no svg{color:var(--mut);opacity:.6}
 .soon{display:inline-flex;align-items:center;margin-top:7px;padding:3px 10px;border-radius:7px;
@@ -772,7 +784,7 @@ h2{font-weight:600;letter-spacing:-.03em;line-height:1.06;font-size:88px}
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px">
       <div><span class="eb in" style="--d:0">Planes y precios</span><h2 class="rv" style="--d:1;margin-top:18px;font-size:68px">Un plan <span class="g">por cada tamaño.</span></h2></div>
       <div class="in" style="--d:2">
-        <div class="bt" data-bt>
+        <div class="bt" data-bt><i class="btp"></i>
           <button type="button" class="on" data-p="m">Mensual</button>
           <button type="button" data-p="y">Anual <i>−18 %</i></button>
         </div>
@@ -1038,15 +1050,53 @@ document.querySelectorAll('[data-timer]').forEach(sw=>{
    contador arranca ya con el precio correcto en lugar de corregirlo luego. */
 document.querySelectorAll('[data-bt]').forEach(bt=>{
   const sec=bt.closest('section'), bs=[...bt.querySelectorAll('button')];
-  const vals=[...sec.querySelectorAll('[data-m][data-y]')];
-  const set=p=>{
+  const pil=bt.querySelector('.btp'), cards=[...sec.querySelectorAll('.plan')];
+  let modo='m', tms=[];
+
+  // La píldora se mide del botón encendido en vez de llevar anchos a mano:
+  // así sigue cuadrando si cambia una etiqueta o si Inter carga tarde.
+  const pilar=()=>{const b=bs.find(x=>x.classList.contains('on'));if(!b||!pil)return;
+    pil.style.width=b.offsetWidth+'px';
+    pil.style.transform='translateX('+(b.offsetLeft-5)+'px)';};
+
+  // Cuenta de un precio al otro, no desde cero: lo que hay que ver es el
+  // salto de 49 a 40. Usa el mismo _raf que el contador de entrada de
+  // prestamistas-fx2, así que uno corta al otro en vez de pelearse por el
+  // textContent si se pulsa a media cuenta.
+  const cuenta=(el,a,b)=>{cancelAnimationFrame(el._raf);
+    const t0=performance.now(), D=460;
+    const paso=now=>{const p=Math.min(1,(now-t0)/D), e=1-Math.pow(1-p,3);
+      el.textContent=String(Math.round(a+(b-a)*e));
+      if(p<1)el._raf=requestAnimationFrame(paso);};
+    el._raf=requestAnimationFrame(paso);};
+
+  const pinta=(el,v,anim)=>{
+    const a=parseFloat(el.textContent), b=parseFloat(v);
+    if('final' in el.dataset) el.dataset.final=v;
+    // 'pxw' y no 'sw': .sw ya es el reloj de la cuenta atrás, 760x760, y
+    // deformaba la tarjeta entera.
+    if(anim){el.classList.remove('pxw');void el.offsetWidth;el.classList.add('pxw');}
+    if(anim&&!isNaN(a)&&!isNaN(b)&&a!==b) return cuenta(el,a,b);
+    cancelAnimationFrame(el._raf); el.textContent=v;};
+
+  // Sin animar al volver a la slide: ahí manda el contador de entrada, que
+  // arranca justo después de esto y necesita el valor final ya puesto.
+  const set=(p,anim)=>{
+    modo=p; tms.forEach(clearTimeout); tms=[];
     bs.forEach(b=>b.classList.toggle('on',b.dataset.p===p));
-    vals.forEach(el=>{const v=el.dataset[p]; el.textContent=v;
-      if('final' in el.dataset) el.dataset.final=v;});
-  };
-  bs.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();set(b.dataset.p);}));
+    pilar();
+    cards.forEach((c,n)=>{
+      const vs=[...c.querySelectorAll('[data-m][data-y]')];
+      if(!vs.length)return;
+      const ir=()=>vs.forEach(el=>pinta(el,el.dataset[p],anim));
+      anim?tms.push(setTimeout(ir,n*70)):ir();});};
+
+  bs.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();
+    if(b.dataset.p!==modo)set(b.dataset.p,true);}));
   document.addEventListener('slidechange',e=>{
-    if(e.detail&&e.detail.slide===sec) set('m');},true);
+    if(e.detail&&e.detail.slide===sec) set('m',false);},true);
+  pilar();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(pilar);
 });
 </script>
 </body>
